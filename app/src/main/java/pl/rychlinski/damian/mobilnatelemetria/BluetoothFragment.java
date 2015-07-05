@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -95,4 +97,19 @@ public class BluetoothFragment extends Fragment {
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
     }
+
+    /**
+     * The action listener for the EditText widget, to listen for the return key
+     */
+    private TextView.OnEditorActionListener mWriteListener
+            = new TextView.OnEditorActionListener() {
+        public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+            // If the action is a key-up event on the return key, send the message
+            if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
+                String message = view.getText().toString();
+                sendMessage(message);
+            }
+            return true;
+        }
+    };
 }
