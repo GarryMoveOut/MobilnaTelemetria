@@ -8,5 +8,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="send">Wyślij</string>
     <string name="not_connected">Nie połączono</string>
+    <string name="title_connected_to">Połączono z</string>
 
 </resources>
