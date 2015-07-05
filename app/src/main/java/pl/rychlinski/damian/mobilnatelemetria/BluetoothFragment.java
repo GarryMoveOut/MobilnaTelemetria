@@ -5,6 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -18,6 +25,13 @@ public class BluetoothFragment extends Fragment {
 
     private BluetoothAdapter mBluetoothAdapter = null;
     private UslugaBluetooth mChatService = null;
+    private ArrayAdapter<String> mConversationArrayAdapter;
+    private StringBuffer mOutStringBuffer;
+
+    // Layout Views
+    private ListView mConversationView;
+    private EditText mOutEditText;
+    private Button mSendButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,5 +60,39 @@ public class BluetoothFragment extends Fragment {
         } else if (mChatService == null) {
             setupChat();
         }
+    }
+
+    /**
+     * Set up the UI and background operations for chat.
+     */
+    private void setupChat() {
+        Log.d(TAG, "setupChat()");
+
+        // Initialize the array adapter for the conversation thread
+        mConversationArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.message);
+
+        mConversationView.setAdapter(mConversationArrayAdapter);
+
+        // Initialize the compose field with a listener for the return key
+        mOutEditText.setOnEditorActionListener(mWriteListener);
+
+        // Initialize the send button with a listener that for click events
+        mSendButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Send a message using content of the edit text widget
+                View view = getView();
+                if (null != view) {
+                    TextView textView = (TextView) view.findViewById(R.id.edit_text_out);
+                    String message = textView.getText().toString();
+                    sendMessage(message);
+                }
+            }
+        });
+
+        // Initialize the BluetoothChatService to perform bluetooth connections
+        mChatService = new UslugaBluetooth(getActivity(), mHandler);
+
+        // Initialize the buffer for outgoing messages
+        mOutStringBuffer = new StringBuffer("");
     }
 }
