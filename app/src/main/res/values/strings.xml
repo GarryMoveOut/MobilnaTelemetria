@@ -15,5 +15,6 @@
     <string name="title_paired_devices">Sparowane</string>
     <string name="title_other_devices">Inne</string>
     <string name="button_scan">Skanuj</string>
+    <string name="scanning">Skanowanie</string>
 
 </resources>
