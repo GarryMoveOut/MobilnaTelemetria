@@ -27,6 +27,8 @@ public class UslugaBluetooth {
     private final Handler mHandler;
     private int mState;
     private ConnectedThread mConnectedThread;
+    private ConnectThread mConnectThread;
+
 
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
@@ -129,7 +131,8 @@ public class UslugaBluetooth {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
                     // Start the service over to restart listening mode
-                    UslugaBluetooth.this.start();
+                    // UslugaBluetooth.this.start();
+                    //TODO: czy serwer?
                     break;
                 }
             }
@@ -173,14 +176,15 @@ public class UslugaBluetooth {
         mHandler.sendMessage(msg);
 
         // Start the service over to restart listening mode
-        UslugaBluetooth.this.start();
+        //UslugaBluetooth.this.start();
+        //TODO: czy serwer?
     }
 
     /**
      * Start the chat service. Specifically start AcceptThread to begin a
      * session in listening (server) mode. Called by the Activity onResume()
      */
-    public synchronized void start() {
+    /*public synchronized void start() {
         Log.d(TAG, "start");
 
         // Cancel any thread attempting to make a connection
@@ -206,5 +210,5 @@ public class UslugaBluetooth {
             mInsecureAcceptThread = new AcceptThread(false);
             mInsecureAcceptThread.start();
         }
-    }
+    }*/
 }
