@@ -12,5 +12,8 @@
     <string name="title_connecting">Łączenie...</string>
     <string name="title_not_connected">Brak połączenia</string>
     <string name="bt_not_enabled_leaving">Bluetooth nie włączony</string>
+    <string name="title_paired_devices">Sparowane</string>
+    <string name="title_other_devices">Inne</string>
+    <string name="button_scan">Skanuj</string>
 
 </resources>
