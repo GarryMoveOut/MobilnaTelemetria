@@ -3,6 +3,7 @@ package pl.rychlinski.damian.mobilnatelemetria;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 /**
  * This class does all the work for setting up and managing Bluetooth
@@ -34,5 +35,25 @@ public class UslugaBluetooth {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
+    }
+
+    /**
+     * Set the current state of the chat connection
+     *
+     * @param state An integer defining the current connection state
+     */
+    private synchronized void setState(int state) {
+        Log.d(TAG, "setState() " + mState + " -> " + state);
+        mState = state;
+
+        // Give the new state to the Handler so the UI Activity can update
+        mHandler.obtainMessage(Constants.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+    }
+
+    /**
+     * Return the current connection state.
+     */
+    public synchronized int getState() {
+        return mState;
     }
 }
