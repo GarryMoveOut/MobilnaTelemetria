@@ -9,5 +9,7 @@
     <string name="send">Wyślij</string>
     <string name="not_connected">Nie połączono</string>
     <string name="title_connected_to">Połączono z</string>
+    <string name="title_connecting">Łączenie...</string>
+    <string name="title_not_connected">Brak połączenia</string>
 
 </resources>
