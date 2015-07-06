@@ -3,7 +3,7 @@ package pl.rychlinski.damian.mobilnatelemetria;
 /**
  * Defines several constants used between {@link UslugaBluetooth} and the UI.
  */
-public interface Constans {
+public interface Constants {
     // Message types sent from the BluetoothChatService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
