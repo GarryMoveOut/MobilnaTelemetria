@@ -10,6 +10,7 @@ import android.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,7 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class BluetoothFragment extends Fragment {
+public class BluetoothFragment extends android.support.v4.app.Fragment {
     private static final String TAG = "BluetoothFragment";
 
     // Intent request codes
@@ -56,7 +57,7 @@ public class BluetoothFragment extends Fragment {
 
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
-            FragmentActivity activity = (FragmentActivity) getActivity();
+            FragmentActivity activity = getActivity();
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             activity.finish();
         }
@@ -155,7 +156,7 @@ public class BluetoothFragment extends Fragment {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            FragmentActivity activity = (FragmentActivity) getActivity();
+            FragmentActivity activity = getActivity();
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
@@ -208,7 +209,7 @@ public class BluetoothFragment extends Fragment {
      * @param resId a string resource ID
      */
     private void setStatus(int resId) {
-        FragmentActivity activity = (FragmentActivity) getActivity();
+        FragmentActivity activity = getActivity();
         if (null == activity) {
             return;
         }
@@ -224,7 +225,7 @@ public class BluetoothFragment extends Fragment {
      * @param subTitle status
      */
     private void setStatus(CharSequence subTitle) {
-        FragmentActivity activity = (FragmentActivity) getActivity();
+        FragmentActivity activity = getActivity();
         if (null == activity) {
             return;
         }

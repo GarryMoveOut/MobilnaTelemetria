@@ -1,7 +1,6 @@
 package pl.rychlinski.damian.mobilnatelemetria;
 
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -17,6 +16,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            BluetoothFragment fragment = new BluetoothFragment();
+            transaction.replace(R.id.fragment_bluetooth, fragment);
+            transaction.commit();
+        }
     }
 
     @Override
