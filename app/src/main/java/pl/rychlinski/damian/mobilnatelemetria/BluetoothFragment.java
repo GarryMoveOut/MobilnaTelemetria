@@ -9,13 +9,16 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -337,8 +340,21 @@ public class BluetoothFragment extends Fragment {
             // Only if the state is STATE_NONE, do we know that we haven't started already
             if (mChatService.getState() == UslugaBluetooth.STATE_NONE) {
                 // Start the Bluetooth chat services
-                mChatService.start();
+                mChatService.start(); //TODO Serwer?
             }
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_bluetooth, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mConversationView = (ListView) view.findViewById(R.id.in);
+        mOutEditText = (EditText) view.findViewById(R.id.edit_text_out);
+        mSendButton = (Button) view.findViewById(R.id.button_send);
     }
 }
