@@ -56,7 +56,7 @@ public class BluetoothFragment extends Fragment {
 
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
-            FragmentActivity activity = getActivity();
+            FragmentActivity activity = (FragmentActivity) getActivity();
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             activity.finish();
         }
@@ -155,7 +155,7 @@ public class BluetoothFragment extends Fragment {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            FragmentActivity activity = getActivity();
+            FragmentActivity activity = (FragmentActivity) getActivity();
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
@@ -208,7 +208,7 @@ public class BluetoothFragment extends Fragment {
      * @param resId a string resource ID
      */
     private void setStatus(int resId) {
-        FragmentActivity activity = getActivity();
+        FragmentActivity activity = (FragmentActivity) getActivity();
         if (null == activity) {
             return;
         }
@@ -224,7 +224,7 @@ public class BluetoothFragment extends Fragment {
      * @param subTitle status
      */
     private void setStatus(CharSequence subTitle) {
-        FragmentActivity activity = getActivity();
+        FragmentActivity activity = (FragmentActivity) getActivity();
         if (null == activity) {
             return;
         }
