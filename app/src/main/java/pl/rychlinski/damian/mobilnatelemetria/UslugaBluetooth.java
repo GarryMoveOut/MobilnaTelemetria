@@ -181,10 +181,40 @@ public class UslugaBluetooth {
     }
 
     /**
+     * Start the ConnectThread to initiate a connection to a remote device.
+     *
+     * @param device The BluetoothDevice to connect
+     * @param secure Socket Security type - Secure (true) , Insecure (false)
+     */
+    public synchronized void connect(BluetoothDevice device, boolean secure) {
+        Log.d(TAG, "connect to: " + device);
+
+        // Cancel any thread attempting to make a connection
+        if (mState == STATE_CONNECTING) {
+            if (mConnectThread != null) {
+                mConnectThread.cancel();
+                mConnectThread = null;
+            }
+        }
+
+        // Cancel any thread currently running a connection
+        if (mConnectedThread != null) {
+            mConnectedThread.cancel();
+            mConnectedThread = null;
+        }
+
+        // Start the thread to connect with the given device
+        mConnectThread = new ConnectThread(device, secure);
+        mConnectThread.start();
+        setState(STATE_CONNECTING);
+    }
+
+    /**
      * Start the chat service. Specifically start AcceptThread to begin a
      * session in listening (server) mode. Called by the Activity onResume()
      */
-    /*public synchronized void start() {
+    /*
+    public synchronized void start() {
         Log.d(TAG, "start");
 
         // Cancel any thread attempting to make a connection
@@ -210,5 +240,6 @@ public class UslugaBluetooth {
             mInsecureAcceptThread = new AcceptThread(false);
             mInsecureAcceptThread.start();
         }
-    }*/
+    }
+    */
 }
