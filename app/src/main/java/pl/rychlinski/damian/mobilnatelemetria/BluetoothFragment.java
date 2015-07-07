@@ -317,4 +317,12 @@ public class BluetoothFragment extends Fragment {
             startActivity(discoverableIntent);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mChatService != null) {
+            mChatService.stop();
+        }
+    }
 }
