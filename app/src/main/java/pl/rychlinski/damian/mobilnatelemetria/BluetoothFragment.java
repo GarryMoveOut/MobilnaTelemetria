@@ -340,7 +340,7 @@ public class BluetoothFragment extends Fragment {
             // Only if the state is STATE_NONE, do we know that we haven't started already
             if (mChatService.getState() == UslugaBluetooth.STATE_NONE) {
                 // Start the Bluetooth chat services
-                mChatService.start(); //TODO Serwer?
+                //mChatService.start(); //TODO Serwer?
             }
         }
     }
