@@ -124,15 +124,21 @@ public class UslugaBluetooth {
             byte[] buffer = new byte[1024];
             int bytes;
 
+            StringBuilder readMessage = new StringBuilder();
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.read(buffer);
+                    String readed = new String(buffer, 0, bytes);
+                    readMessage.append(readed);
 
-                    // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
-                            .sendToTarget();
+                    if (readed.contains("\n")) {
+                        // Send the obtained bytes to the UI Activity
+                        mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
+                                .sendToTarget();
+                        readMessage.setLength(0);
+                    }
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
