@@ -139,6 +139,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
 
         // Check that there's actually something to send
         if (message.length() > 0) {
+            message = message + "\r\n";
             // Get the message bytes and tell the BluetoothChatService to write
             byte[] send = message.getBytes();
             mChatService.write(send);
