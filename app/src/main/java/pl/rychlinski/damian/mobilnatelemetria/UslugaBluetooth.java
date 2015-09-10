@@ -91,7 +91,7 @@ public class UslugaBluetooth {
             r = mConnectedThread;
         }
         // Perform the write unsynchronized
-        r.write(out);
+        r.addToQueue(out);
     }
 
     /**
@@ -142,6 +142,9 @@ public class UslugaBluetooth {
                         // Send the obtained bytes to the UI Activity
                         mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
                                 .sendToTarget();
+                        if(readed.contains(">")){
+                            fireCmd();
+                        }
                         readMessage.setLength(0);
                     }
                 } catch (IOException e) {
@@ -157,11 +160,12 @@ public class UslugaBluetooth {
 
         /**
          * Write to the connected OutStream. Wiadomości do OBDII
+         * Pobiera komende z kolejki następnie wysyła ją do OBD oraz do widoku.
          *
-         * @param buffer The bytes to write
          */
-        public void write(byte[] buffer) {
+        public void fireCmd() {
             try {
+                byte[] buffer = cmdQueue.peek();
                 mmOutStream.write(buffer);
 
                 // Share the sent message back to the UI Activity
