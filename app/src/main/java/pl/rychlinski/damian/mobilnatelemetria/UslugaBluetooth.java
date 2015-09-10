@@ -165,14 +165,17 @@ public class UslugaBluetooth {
          */
         public void fireCmd() {
             try {
-                byte[] buffer = cmdQueue.peek();
-                mmOutStream.write(buffer);
+                byte[] buffer = cmdQueue.poll();
 
-                // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer)
-                        .sendToTarget();
+                if(buffer != null) {
+                    mmOutStream.write(buffer);
+
+                    // Share the sent message back to the UI Activity
+                    mHandler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer)
+                            .sendToTarget();
+                }
             } catch (IOException e) {
-                Log.e(TAG, "Exception during write", e);
+                Log.e(TAG, "Exception during fire command", e);
             }
         }
 
