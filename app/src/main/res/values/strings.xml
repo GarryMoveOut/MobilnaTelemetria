@@ -22,5 +22,6 @@
     <string name="secure_connect">Bezpieczne połączenie</string>
     <string name="insecure_connect">Nie szyfrowane połączenie</string>
     <string name="discoverable">Widzialny</string>
+    <string name="setup">Ustaw</string>
 
 </resources>
