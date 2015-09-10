@@ -12,6 +12,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.UUID;
 
 /**
@@ -100,12 +102,14 @@ public class UslugaBluetooth {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
+        private Queue<String> cmdQueue = new LinkedList<String>();
 
         public ConnectedThread(BluetoothSocket socket, String socketType) {
             Log.d(TAG, "create ConnectedThread: " + socketType);
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
+            cmdQueue = new LinkedList<String>();
 
             // Get the BluetoothSocket input and output streams
             try {
@@ -133,7 +137,7 @@ public class UslugaBluetooth {
                     String readed = new String(buffer, 0, bytes);
                     readMessage.append(readed);
                     //TODO: sprawdzić czy działa bez warunku 0d - możliwe błędy przy odbieraniu
-                    
+
                     if (readed.contains("\n") || readed.contains("\r") || readed.contains("0d")) {
                         // Send the obtained bytes to the UI Activity
                         mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
