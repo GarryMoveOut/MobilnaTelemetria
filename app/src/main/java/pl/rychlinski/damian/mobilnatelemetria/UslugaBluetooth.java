@@ -102,14 +102,14 @@ public class UslugaBluetooth {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
-        private Queue<String> cmdQueue = new LinkedList<String>();
+        private Queue<byte[]> cmdQueue;
 
         public ConnectedThread(BluetoothSocket socket, String socketType) {
             Log.d(TAG, "create ConnectedThread: " + socketType);
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
-            cmdQueue = new LinkedList<String>();
+            cmdQueue = new LinkedList<>();
 
             // Get the BluetoothSocket input and output streams
             try {
@@ -132,7 +132,7 @@ public class UslugaBluetooth {
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
-                    // Read from the InputStream
+                    // Read from the InputStream (wiadomości od OBDII
                     bytes = mmInStream.read(buffer);
                     String readed = new String(buffer, 0, bytes);
                     readMessage.append(readed);
@@ -156,7 +156,7 @@ public class UslugaBluetooth {
         }
 
         /**
-         * Write to the connected OutStream.
+         * Write to the connected OutStream. Wiadomości do OBDII
          *
          * @param buffer The bytes to write
          */
@@ -169,6 +169,19 @@ public class UslugaBluetooth {
                         .sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
+            }
+        }
+
+        /**
+         * Dopisuje komende do kolejki która później zostanie wysłana do OBDII
+         *
+         * @param buffer The bytes to write
+         */
+        public void addToQueue(byte[] buffer) {
+            try {
+                cmdQueue.offer(buffer);
+            } catch (IllegalStateException e) {
+                Log.e(TAG, "Exception during write queue list", e);
             }
         }
 
