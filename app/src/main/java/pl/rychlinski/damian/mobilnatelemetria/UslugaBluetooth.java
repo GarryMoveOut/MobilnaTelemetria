@@ -132,7 +132,8 @@ public class UslugaBluetooth {
                     bytes = mmInStream.read(buffer);
                     String readed = new String(buffer, 0, bytes);
                     readMessage.append(readed);
-
+                    //TODO: sprawdzić czy działa bez warunku 0d - możliwe błędy przy odbieraniu
+                    
                     if (readed.contains("\n") || readed.contains("\r") || readed.contains("0d")) {
                         // Send the obtained bytes to the UI Activity
                         mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
