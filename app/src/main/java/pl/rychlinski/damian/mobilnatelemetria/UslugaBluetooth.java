@@ -133,7 +133,7 @@ public class UslugaBluetooth {
                     String readed = new String(buffer, 0, bytes);
                     readMessage.append(readed);
 
-                    if (readed.contains("\n")) {
+                    if (readed.contains("\n") || readed.contains("\r") || readed.contains("0d")) {
                         // Send the obtained bytes to the UI Activity
                         mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
                                 .sendToTarget();
