@@ -27,6 +27,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 
 public class BluetoothFragment extends android.support.v4.app.Fragment {
     private static final String TAG = "BluetoothFragment";
@@ -46,6 +48,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     private ListView mConversationView;
     private EditText mOutEditText;
     private Button mSendButton;
+    private Button setupButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,17 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
                     TextView textView = (TextView) view.findViewById(R.id.edit_text_out);
                     String message = textView.getText().toString();
                     sendMessage(message);
+                }
+            }
+        });
+
+        setupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    View view = getView();
+                if(view != null){
+                    String presetup = "atz; atl0; ate0; ath1; atat1; atstff; at sp; 0100; atdp; 0120"; //TODO: WPisać poprawne komendy ustawieniowe
+                    sendMessage(presetup);
                 }
             }
         });
@@ -357,5 +371,6 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         mConversationView = (ListView) view.findViewById(R.id.in);
         mOutEditText = (EditText) view.findViewById(R.id.edit_text_out);
         mSendButton = (Button) view.findViewById(R.id.button_send);
+        setupButton = (Button) view.findViewById(R.id.button_setup);
     }
 }
