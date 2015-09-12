@@ -155,8 +155,8 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         if (message.length() > 0) {
             message = message + "\r";
             // Get the message bytes and tell the BluetoothChatService to write
-            byte[] send = message.getBytes();
-            mChatService.write(send);
+            //byte[] send = message.getBytes();
+            mChatService.write(message);
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);

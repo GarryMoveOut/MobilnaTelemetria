@@ -12,7 +12,9 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 
@@ -82,7 +84,7 @@ public class UslugaBluetooth {
      * @param out The bytes to write
      * @see ConnectedThread#write(byte[])
      */
-    public void write(byte[] out) {
+    public void write(String out) {
         // Create temporary object
         ConnectedThread r;
         // Synchronize a copy of the ConnectedThread
@@ -184,9 +186,13 @@ public class UslugaBluetooth {
          *
          * @param buffer The bytes to write
          */
-        public void addToQueue(byte[] buffer) {
+        public void addToQueue(String buffer) {
             try {
-                cmdQueue.offer(buffer);
+                List<String> items = Arrays.asList(buffer.split("\\s*;\\s*"));
+
+                for(int i=0;i<items.size();i++){
+                    cmdQueue.offer(items.get(i).getBytes());
+                }
             } catch (IllegalStateException e) {
                 Log.e(TAG, "Exception during write queue list", e);
             }
