@@ -82,7 +82,7 @@ public class UslugaBluetooth {
      * Write to the ConnectedThread in an unsynchronized manner
      *
      * @param out The bytes to write
-     * @see ConnectedThread#write(byte[])
+     * @see ConnectedThread#write(String)
      */
     public void write(String out) {
         // Create temporary object
