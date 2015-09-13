@@ -145,7 +145,7 @@ public class UslugaBluetooth {
                         mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
                                 .sendToTarget();
                         if(readed.contains(">")){
-                            fireCmd();
+                            fireCmd(); //TODO: nie odpala się dopóki nie dostanie żadnej odp. Błąd na początku nigdy nie wyśle żadnej komendy
                         }
                         readMessage.setLength(0);
                     }
@@ -189,10 +189,15 @@ public class UslugaBluetooth {
         public void addToQueue(String buffer) {
             try {
                 List<String> items = Arrays.asList(buffer.split("\\s*;\\s*"));
+                //TODO: do optymalizacji
+                for(int i=0;i<items.size();i++){
+                    items.set(i,items.get(i)+"\r");
+                }
 
                 for(int i=0;i<items.size();i++){
                     cmdQueue.offer(items.get(i).getBytes());
                 }
+                fireCmd(); //TODO: tylko do testów
             } catch (IllegalStateException e) {
                 Log.e(TAG, "Exception during write queue list", e);
             }
@@ -338,7 +343,7 @@ public class UslugaBluetooth {
 
         // Start the service over to restart listening mode
         //UslugaBluetooth.this.start();
-        //TODO: Serwer ?
+        //Serwer ?
     }
 
     /**
@@ -364,7 +369,7 @@ public class UslugaBluetooth {
         }
 
         // Cancel the accept thread because we only want to connect to one device
-        /* TODO SEREWER??
+        /*  SEREWER??
         if (mSecureAcceptThread != null) {
             mSecureAcceptThread.cancel();
             mSecureAcceptThread = null;
