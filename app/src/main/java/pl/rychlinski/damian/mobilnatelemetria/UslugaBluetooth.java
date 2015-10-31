@@ -132,7 +132,7 @@ public class UslugaBluetooth {
 
             StringBuilder readMessage = new StringBuilder();
             // Keep listening to the InputStream while connected
-            while (true) {
+            while (Thread.interrupted()) {
                 try {
                     // Read from the InputStream (wiadomości od OBDII
                     bytes = mmInStream.read(buffer);
