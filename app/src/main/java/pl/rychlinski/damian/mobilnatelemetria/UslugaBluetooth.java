@@ -147,6 +147,7 @@ public class UslugaBluetooth {
                         if(readed.contains(">")){
                             fireCmd(); //TODO: nie odpala się dopóki nie dostanie żadnej odp. Błąd na początku nigdy nie wyśle żadnej komendy
                         }
+                        //TODO: Dodać dekodowanie
                         readMessage.setLength(0);
                     }
                 } catch (IOException e) {
@@ -154,7 +155,6 @@ public class UslugaBluetooth {
                     connectionLost();
                     // Start the service over to restart listening mode
                     // UslugaBluetooth.this.start();
-                    //TODO: czy serwer?
                     break;
                 }
             }
@@ -225,7 +225,6 @@ public class UslugaBluetooth {
 
         // Start the service over to restart listening mode
         //UslugaBluetooth.this.start();
-        //TODO: czy serwer?
     }
 
     /**
