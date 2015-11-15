@@ -105,6 +105,7 @@ public class UslugaBluetooth {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
         private Queue<byte[]> cmdQueue;
+        private DekoderPID decoderPIDThread;
 
         public ConnectedThread(BluetoothSocket socket, String socketType) {
             Log.d(TAG, "create ConnectedThread: " + socketType);
@@ -112,6 +113,9 @@ public class UslugaBluetooth {
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
             cmdQueue = new LinkedList<>();
+
+            decoderPIDThread = new DekoderPID(mainHandler);
+            decoderPIDThread.start();
 
             // Get the BluetoothSocket input and output streams
             try {
@@ -147,7 +151,15 @@ public class UslugaBluetooth {
                         if(readed.contains(">")){
                             fireCmd(); //TODO: nie odpala się dopóki nie dostanie żadnej odp. Błąd na początku nigdy nie wyśle żadnej komendy
                         }
-                        //TODO: Dodać dekodowanie
+
+                        //Wysłanie PIDA do dekodera
+                        Message messageToThread = new Message();
+                        Bundle messageData = new Bundle();
+                        messageData.putByteArray("PID",buffer);
+                        messageToThread.what=Constants.PID_MESSAGE;
+                        messageToThread.setData(messageData);
+                        decoderPIDThread.getHandler().sendMessage(messageToThread);
+
                         readMessage.setLength(0);
                     }
                 } catch (IOException e) {
@@ -209,7 +221,15 @@ public class UslugaBluetooth {
             } catch (IOException e) {
                 Log.e(TAG, "close() of connect socket failed", e);
             }
+            decoderPIDThread.interrupt();
         }
+
+        //Handler do komunikacji z wątkiem dekodującym PIDY
+        public Handler mainHandler = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                //TODO: Odbieranie zdekodowanych PIDÓW
+            };
+        };
     }
 
     /**
