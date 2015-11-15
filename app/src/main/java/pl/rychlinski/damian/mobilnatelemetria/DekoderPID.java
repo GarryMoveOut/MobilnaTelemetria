@@ -45,6 +45,7 @@ public class DekoderPID extends Thread {
                 e.printStackTrace();
             }
         }
+        Log.d(TAG, "DecoderThread stopped");
     }
 
     public Handler getHandler() {
