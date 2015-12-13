@@ -156,6 +156,8 @@ public class UslugaBluetooth {
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             int B = Integer.parseInt(listBytesAnsw.get(3), 16);
                             float obroty = (A*255+B)/4;
+                            mHandler.obtainMessage(Constants.RPM, obroty)
+                                    .sendToTarget();
                         }
 
                         //Obciążenie silnika
