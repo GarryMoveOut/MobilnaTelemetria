@@ -114,8 +114,8 @@ public class UslugaBluetooth {
             OutputStream tmpOut = null;
             cmdQueue = new LinkedList<>();
 
-            decoderPIDThread = new DekoderPID(mainHandler);
-            decoderPIDThread.start();
+            //decoderPIDThread = new DekoderPID(mainHandler);
+            //decoderPIDThread.start();
 
             // Get the BluetoothSocket input and output streams
             try {
@@ -148,18 +148,57 @@ public class UslugaBluetooth {
                         // Send the obtained bytes to the UI Activity
                         mHandler.obtainMessage(Constants.MESSAGE_READ, bytes, -1, buffer)
                                 .sendToTarget();
-                        if(readed.contains(">")){
-                            fireCmd(); //TODO: nie odpala się dopóki nie dostanie żadnej odp. Błąd na początku nigdy nie wyśle żadnej komendy
+
+                        List<String> listBytesAnsw = Arrays.asList(readed.trim().split("\\s+"));
+
+                        //Obroty silnika
+                        if(listBytesAnsw.get(1).equals("0C")){
+                            int A = Integer.parseInt(listBytesAnsw.get(2), 16);
+                            int B = Integer.parseInt(listBytesAnsw.get(3), 16);
+                            float obroty = (A*255+B)/4;
+                        }
+
+                        //Obciążenie silnika
+                        if(listBytesAnsw.get(1).equals("04")){
+                            int A = Integer.parseInt(listBytesAnsw.get(2), 16);
+                            float obciazenie = A*100/255;
+                        }
+
+                        //Temperatura płynu chłodniczego
+                        if(listBytesAnsw.get(1).equals("05")){
+                            int A = Integer.parseInt(listBytesAnsw.get(2), 16);
+                            int B = Integer.parseInt(listBytesAnsw.get(3), 16);
+                            int obroty = A-40;
+                        }
+
+                        //Prędkość pojazdu
+                        if(listBytesAnsw.get(1).equals("0D")){
+                            int predkosc = Integer.parseInt(listBytesAnsw.get(2), 16);
+                        }
+
+                        //Temperatura powietrza zassanego
+                        if(listBytesAnsw.get(1).equals("0F")){
+                            int A = Integer.parseInt(listBytesAnsw.get(2), 16);
+                            int tempPowZas = A-40;
+                        }
+
+                        //Pozycja przepustnicy
+                        if(listBytesAnsw.get(1).equals("11")){
+                            int A = Integer.parseInt(listBytesAnsw.get(2), 16);
+                            float pozPrzep = A*100/255;
                         }
 
                         //Wysłanie PIDA do dekodera
-                        Message messageToThread = new Message();
-                        Bundle messageData = new Bundle();
-                        messageData.putByteArray("PID",buffer);
-                        messageToThread.what=Constants.PID_MESSAGE;
-                        messageToThread.setData(messageData);
-                        decoderPIDThread.getHandler().sendMessage(messageToThread);
+                        //Message messageToThread = new Message();
+                        //Bundle messageData = new Bundle();
+                        //messageData.putByteArray("PID",buffer);
+                        //messageToThread.what=Constants.PID_MESSAGE;
+                        //messageToThread.setData(messageData);
+                        //decoderPIDThread.getHandler().sendMessage(messageToThread);
 
+                        if(readed.contains(">")){
+                            fireCmd(); //TODO: nie odpala się dopóki nie dostanie żadnej odp. Błąd na początku nigdy nie wyśle żadnej komendy
+                        }
                         readMessage.setLength(0);
                     }
                 } catch (IOException e) {
@@ -225,11 +264,11 @@ public class UslugaBluetooth {
         }
 
         //Handler do komunikacji z wątkiem dekodującym PIDY
-        public Handler mainHandler = new Handler() {
-            public void handleMessage(android.os.Message msg) {
-                //TODO: Odbieranie zdekodowanych PIDÓW
-            };
-        };
+        //public Handler mainHandler = new Handler() {
+        //    public void handleMessage(android.os.Message msg) {
+        //        //TODO: Odbieranie zdekodowanych PIDÓW
+        //    };
+        //};
     }
 
     /**
