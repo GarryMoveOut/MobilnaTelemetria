@@ -156,38 +156,41 @@ public class UslugaBluetooth {
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             int B = Integer.parseInt(listBytesAnsw.get(3), 16);
                             float obroty = (A*255+B)/4;
-                            mHandler.obtainMessage(Constants.RPM, obroty)
-                                    .sendToTarget();
+                            mHandler.obtainMessage(Constants.RPM, obroty).sendToTarget();
                         }
 
                         //Obciążenie silnika
                         if(listBytesAnsw.get(1).equals("04")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            float obciazenie = A*100/255;
+                            float load = A*100/255;
+                            mHandler.obtainMessage(Constants.LOAD, load).sendToTarget();
                         }
 
                         //Temperatura płynu chłodniczego
                         if(listBytesAnsw.get(1).equals("05")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            int B = Integer.parseInt(listBytesAnsw.get(3), 16);
-                            int obroty = A-40;
+                            int coolantTemp = A-40;
+                            mHandler.obtainMessage(Constants.COOLANTTEMP, coolantTemp).sendToTarget();
                         }
 
                         //Prędkość pojazdu
                         if(listBytesAnsw.get(1).equals("0D")){
-                            int predkosc = Integer.parseInt(listBytesAnsw.get(2), 16);
+                            int speed = Integer.parseInt(listBytesAnsw.get(2), 16);
+                            mHandler.obtainMessage(Constants.SPEED, speed).sendToTarget();
                         }
 
                         //Temperatura powietrza zassanego
                         if(listBytesAnsw.get(1).equals("0F")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            int tempPowZas = A-40;
+                            int airTemp = A-40;
+                            mHandler.obtainMessage(Constants.AIRTEMP, airTemp).sendToTarget();
                         }
 
                         //Pozycja przepustnicy
                         if(listBytesAnsw.get(1).equals("11")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            float pozPrzep = A*100/255;
+                            float throttle = A*100/255;
+                            mHandler.obtainMessage(Constants.THROTTLE, throttle).sendToTarget();
                         }
 
                         //Wysłanie PIDA do dekodera
