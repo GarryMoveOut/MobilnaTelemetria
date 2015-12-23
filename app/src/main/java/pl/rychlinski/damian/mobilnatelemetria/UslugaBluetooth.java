@@ -155,8 +155,9 @@ public class UslugaBluetooth {
                         if(listBytesAnsw.get(1).equals("0C")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             int B = Integer.parseInt(listBytesAnsw.get(3), 16);
-                            float obroty = (A*255+B)/4;
-                            mHandler.obtainMessage(Constants.RPM, obroty).sendToTarget();
+                            float rpm = (A*255+B)/4;
+                            mHandler.obtainMessage(Constants.RPM, rpm).sendToTarget();
+                            addToQueue("01 0C");
                         }
 
                         //Obciążenie silnika
@@ -164,6 +165,7 @@ public class UslugaBluetooth {
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             float load = A*100/255;
                             mHandler.obtainMessage(Constants.LOAD, load).sendToTarget();
+                            addToQueue("01 04");
                         }
 
                         //Temperatura płynu chłodniczego
@@ -171,12 +173,14 @@ public class UslugaBluetooth {
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             int coolantTemp = A-40;
                             mHandler.obtainMessage(Constants.COOLANTTEMP, coolantTemp).sendToTarget();
+                            addToQueue("01 05");
                         }
 
                         //Prędkość pojazdu
                         if(listBytesAnsw.get(1).equals("0D")){
                             int speed = Integer.parseInt(listBytesAnsw.get(2), 16);
                             mHandler.obtainMessage(Constants.SPEED, speed).sendToTarget();
+                            addToQueue("01 0D");
                         }
 
                         //Temperatura powietrza zassanego
@@ -184,6 +188,7 @@ public class UslugaBluetooth {
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             int airTemp = A-40;
                             mHandler.obtainMessage(Constants.AIRTEMP, airTemp).sendToTarget();
+                            addToQueue("01 0F");
                         }
 
                         //Pozycja przepustnicy
@@ -191,6 +196,7 @@ public class UslugaBluetooth {
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             float throttle = A*100/255;
                             mHandler.obtainMessage(Constants.THROTTLE, throttle).sendToTarget();
+                            addToQueue("01 11");
                         }
 
                         //Wysłanie PIDA do dekodera
