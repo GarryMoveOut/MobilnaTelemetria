@@ -227,6 +227,7 @@ public class UslugaBluetooth {
          */
         public void startTelemetry(){
             addToQueue("01 0C; 01 04; 01 05; 01 0D; 01 0F; 01 11");
+            fireCmd();
         }
 
         /**
