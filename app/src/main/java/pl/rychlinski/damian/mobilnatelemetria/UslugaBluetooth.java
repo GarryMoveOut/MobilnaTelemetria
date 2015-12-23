@@ -223,6 +223,13 @@ public class UslugaBluetooth {
         }
 
         /**
+         * Komenda rozpoczynająca monitorowanie parametrów pracy.
+         */
+        public void startTelemetry(){
+            addToQueue("01 0C; 01 04; 01 05; 01 0D; 01 0F; 01 11");
+        }
+
+        /**
          * Write to the connected OutStream. Wiadomości do OBDII
          * Pobiera komende z kolejki następnie wysyła ją do OBD oraz do widoku.
          *
@@ -259,7 +266,6 @@ public class UslugaBluetooth {
                 for(int i=0;i<items.size();i++){
                     cmdQueue.offer(items.get(i).getBytes());
                 }
-                fireCmd(); //TODO: tylko do testów
             } catch (IllegalStateException e) {
                 Log.e(TAG, "Exception during write queue list", e);
             }
