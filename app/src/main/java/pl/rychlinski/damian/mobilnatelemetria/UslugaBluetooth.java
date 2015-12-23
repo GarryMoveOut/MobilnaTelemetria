@@ -96,6 +96,15 @@ public class UslugaBluetooth {
         r.addToQueue(out);
     }
 
+    public void beginTelemetry(){
+        ConnectedThread r;
+        synchronized (this){
+            if (mState != STATE_CONNECTED) return;
+            r = mConnectedThread;
+        }
+        r.startTelemetry();
+    }
+
     /**
      * This thread runs during a connection with a remote device.
      * It handles all incoming and outgoing transmissions.
@@ -142,7 +151,6 @@ public class UslugaBluetooth {
                     bytes = mmInStream.read(buffer);
                     String readed = new String(buffer, 0, bytes);
                     readMessage.append(readed);
-                    //TODO: sprawdzić czy działa bez warunku 0d - możliwe błędy przy odbieraniu
 
                     if (readed.contains("\n") || readed.contains("\r") || readed.contains("0d")) {
                         // Send the obtained bytes to the UI Activity
@@ -208,7 +216,7 @@ public class UslugaBluetooth {
                         //decoderPIDThread.getHandler().sendMessage(messageToThread);
 
                         if(readed.contains(">")){
-                            fireCmd(); //TODO: nie odpala się dopóki nie dostanie żadnej odp. Błąd na początku nigdy nie wyśle żadnej komendy
+                            fireCmd();
                         }
                         readMessage.setLength(0);
                     }
@@ -284,7 +292,7 @@ public class UslugaBluetooth {
         //Handler do komunikacji z wątkiem dekodującym PIDY
         //public Handler mainHandler = new Handler() {
         //    public void handleMessage(android.os.Message msg) {
-        //        //TODO: Odbieranie zdekodowanych PIDÓW
+        //        //Odbieranie zdekodowanych PIDÓW
         //    };
         //};
     }

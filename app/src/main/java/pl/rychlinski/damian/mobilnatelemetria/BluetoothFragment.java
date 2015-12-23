@@ -111,8 +111,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                     View view = getView();
                 if(view != null){
-                    String presetup = "atz; atl0; ate0; ath0; atat1; atstff; atsp0; 0100; atdp; 0120"; //TODO: Sprawdzić AT AT2
-                    sendMessage(presetup);
+                    mChatService.beginTelemetry();
                 }
             }
         });
