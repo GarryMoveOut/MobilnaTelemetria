@@ -124,7 +124,6 @@ public class UslugaBluetooth {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
         private Queue<byte[]> cmdQueue;
-        //private DekoderPID decoderPIDThread;
 
         public ConnectedThread(BluetoothSocket socket, String socketType) {
             Log.d(TAG, "create ConnectedThread: " + socketType);
@@ -132,9 +131,6 @@ public class UslugaBluetooth {
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
             cmdQueue = new LinkedList<>();
-
-            //decoderPIDThread = new DekoderPID(mainHandler);
-            //decoderPIDThread.start();
 
             // Get the BluetoothSocket input and output streams
             try {
@@ -217,14 +213,6 @@ public class UslugaBluetooth {
                             addToQueue("01 11");
                         }
 
-                        //Wysłanie PIDA do dekodera
-                        //Message messageToThread = new Message();
-                        //Bundle messageData = new Bundle();
-                        //messageData.putByteArray("PID",buffer);
-                        //messageToThread.what=Constants.PID_MESSAGE;
-                        //messageToThread.setData(messageData);
-                        //decoderPIDThread.getHandler().sendMessage(messageToThread);
-
                         if(readed.contains(">")){
                             fireCmd();
                         }
@@ -233,8 +221,6 @@ public class UslugaBluetooth {
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
-                    // Start the service over to restart listening mode
-                    // UslugaBluetooth.this.start();
                     break;
                 }
             }
@@ -248,6 +234,9 @@ public class UslugaBluetooth {
             fireCmd();
         }
 
+        /**
+         * Przesłanie koment ustawiających mikrokontroler ELM
+         */
         public void preSetup(){
             addToQueue("atz; atl0; ate0; ath0; atat1; atstff; atsp0; atdp");
             fireCmd();
@@ -301,15 +290,7 @@ public class UslugaBluetooth {
             } catch (IOException e) {
                 Log.e(TAG, "close() of connect socket failed", e);
             }
-            //decoderPIDThread.interrupt();
         }
-
-        //Handler do komunikacji z wątkiem dekodującym PIDY
-        //public Handler mainHandler = new Handler() {
-        //    public void handleMessage(android.os.Message msg) {
-        //        //Odbieranie zdekodowanych PIDÓW
-        //    };
-        //};
     }
 
     /**
@@ -322,9 +303,6 @@ public class UslugaBluetooth {
         bundle.putString(Constants.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
-
-        // Start the service over to restart listening mode
-        //UslugaBluetooth.this.start();
     }
 
     /**
@@ -467,17 +445,6 @@ public class UslugaBluetooth {
             mConnectedThread = null;
         }
 
-        // Cancel the accept thread because we only want to connect to one device
-        /*  SEREWER??
-        if (mSecureAcceptThread != null) {
-            mSecureAcceptThread.cancel();
-            mSecureAcceptThread = null;
-        }
-        if (mInsecureAcceptThread != null) {
-            mInsecureAcceptThread.cancel();
-            mInsecureAcceptThread = null;
-        }*/
-
         // Start the thread to manage the connection and perform transmissions
         mConnectedThread = new ConnectedThread(socket, socketType);
         mConnectedThread.start();
@@ -507,50 +474,6 @@ public class UslugaBluetooth {
             mConnectedThread.cancel();
             mConnectedThread = null;
         }
-
-        /*if (mSecureAcceptThread != null) {
-            mSecureAcceptThread.cancel();
-            mSecureAcceptThread = null;
-        }
-
-        if (mInsecureAcceptThread != null) {
-            mInsecureAcceptThread.cancel();
-            mInsecureAcceptThread = null;
-        }*/
         setState(STATE_NONE);
     }
-
-    /**
-     * Start the chat service. Specifically start AcceptThread to begin a
-     * session in listening (server) mode. Called by the Activity onResume()
-     */
-    /*
-    public synchronized void start() {
-        Log.d(TAG, "start");
-
-        // Cancel any thread attempting to make a connection
-        if (mConnectThread != null) {
-            mConnectThread.cancel();
-            mConnectThread = null;
-        }
-
-        // Cancel any thread currently running a connection
-        if (mConnectedThread != null) {
-            mConnectedThread.cancel();
-            mConnectedThread = null;
-        }
-
-        setState(STATE_LISTEN);
-
-        // Start the thread to listen on a BluetoothServerSocket
-        if (mSecureAcceptThread == null) {
-            mSecureAcceptThread = new AcceptThread(true);
-            mSecureAcceptThread.start();
-        }
-        if (mInsecureAcceptThread == null) {
-            mInsecureAcceptThread = new AcceptThread(false);
-            mInsecureAcceptThread.start();
-        }
-    }
-    */
 }
