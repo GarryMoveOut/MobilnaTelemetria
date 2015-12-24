@@ -115,7 +115,7 @@ public class UslugaBluetooth {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
         private Queue<byte[]> cmdQueue;
-        private DekoderPID decoderPIDThread;
+        //private DekoderPID decoderPIDThread;
 
         public ConnectedThread(BluetoothSocket socket, String socketType) {
             Log.d(TAG, "create ConnectedThread: " + socketType);
@@ -142,8 +142,7 @@ public class UslugaBluetooth {
         public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
-            byte[] msgBuffer;
-            int bytes, msgBytes;
+            int bytes;
 
             StringBuilder readMessage = new StringBuilder();
             // Keep listening to the InputStream while connected
