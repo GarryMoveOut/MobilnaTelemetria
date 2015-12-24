@@ -204,7 +204,7 @@ public class UslugaBluetooth {
                         //Pozycja przepustnicy
                         if(listBytesAnsw.get(1).equals("11")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            float throttle = A*100/255;
+                            float throttle = (float) A*100/255;
                             mHandler.obtainMessage(Constants.THROTTLE, String.format("%.2f", throttle) ).sendToTarget();
                             addToQueue("01 11");
                         }
