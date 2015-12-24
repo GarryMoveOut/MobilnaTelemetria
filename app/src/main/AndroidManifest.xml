@@ -21,6 +21,7 @@
 
         <activity
             android:name=".DeviceListActivity"
+            android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/select_device"
             android:theme="@android:style/Theme.Holo.Dialog"/>
