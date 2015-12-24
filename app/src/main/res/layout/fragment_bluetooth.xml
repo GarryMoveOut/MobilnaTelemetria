@@ -39,7 +39,8 @@
             android:id="@+id/button_setup"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/setup"/>
+            android:text="@string/setup"
+            android:layout_weight="1" />
 
     </LinearLayout>
 

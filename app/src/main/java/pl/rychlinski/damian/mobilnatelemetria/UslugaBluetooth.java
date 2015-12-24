@@ -12,6 +12,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -141,7 +142,8 @@ public class UslugaBluetooth {
         public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
-            int bytes;
+            byte[] msgBuffer;
+            int bytes, msgBytes;
 
             StringBuilder readMessage = new StringBuilder();
             // Keep listening to the InputStream while connected
@@ -163,16 +165,16 @@ public class UslugaBluetooth {
                         if(listBytesAnsw.get(1).equals("0C")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             int B = Integer.parseInt(listBytesAnsw.get(3), 16);
-                            float rpm = (A*255+B)/4;
-                            mHandler.obtainMessage(Constants.RPM, rpm).sendToTarget();
+                            float rpm = (float) (A*255+B)/4;
+                            mHandler.obtainMessage(Constants.RPM, String.format("%.2f", rpm)).sendToTarget();
                             addToQueue("01 0C");
                         }
 
                         //Obciążenie silnika
                         if(listBytesAnsw.get(1).equals("04")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            float load = A*100/255;
-                            mHandler.obtainMessage(Constants.LOAD, load).sendToTarget();
+                            float load = (float) A*100/255;
+                            mHandler.obtainMessage(Constants.LOAD, String.format("%.2f", load)).sendToTarget();
                             addToQueue("01 04");
                         }
 
@@ -180,14 +182,14 @@ public class UslugaBluetooth {
                         if(listBytesAnsw.get(1).equals("05")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             int coolantTemp = A-40;
-                            mHandler.obtainMessage(Constants.COOLANTTEMP, coolantTemp).sendToTarget();
+                            mHandler.obtainMessage(Constants.COOLANTTEMP, Integer.toString(coolantTemp) ).sendToTarget();
                             addToQueue("01 05");
                         }
 
                         //Prędkość pojazdu
                         if(listBytesAnsw.get(1).equals("0D")){
                             int speed = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            mHandler.obtainMessage(Constants.SPEED, speed).sendToTarget();
+                            mHandler.obtainMessage(Constants.SPEED, Integer.toString(speed) ).sendToTarget();
                             addToQueue("01 0D");
                         }
 
@@ -195,7 +197,7 @@ public class UslugaBluetooth {
                         if(listBytesAnsw.get(1).equals("0F")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             int airTemp = A-40;
-                            mHandler.obtainMessage(Constants.AIRTEMP, airTemp).sendToTarget();
+                            mHandler.obtainMessage(Constants.AIRTEMP, Integer.toString(airTemp) ).sendToTarget();
                             addToQueue("01 0F");
                         }
 
@@ -203,7 +205,7 @@ public class UslugaBluetooth {
                         if(listBytesAnsw.get(1).equals("11")){
                             int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                             float throttle = A*100/255;
-                            mHandler.obtainMessage(Constants.THROTTLE, throttle).sendToTarget();
+                            mHandler.obtainMessage(Constants.THROTTLE, String.format("%.2f", throttle) ).sendToTarget();
                             addToQueue("01 11");
                         }
 

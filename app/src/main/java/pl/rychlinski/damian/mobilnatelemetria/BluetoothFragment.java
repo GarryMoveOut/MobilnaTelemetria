@@ -198,6 +198,30 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
                     String readMessage = new String(readBuf, 0, msg.arg1);
                     mConversationArrayAdapter.add(mConnectedDeviceName + ": " + readMessage);
                     break;
+                case Constants.RPM:
+                    String rpm = (String) msg.obj;
+                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + rpm);
+                    break;
+                case Constants.LOAD:
+                    String load = (String) msg.obj;
+                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + load);
+                    break;
+                case Constants.COOLANTTEMP:
+                    String coolantTemp = (String) msg.obj;
+                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + coolantTemp);
+                    break;
+                case Constants.SPEED:
+                    String speed = (String) msg.obj;
+                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + speed);
+                    break;
+                case Constants.AIRTEMP:
+                    String airTemp = (String) msg.obj;
+                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + airTemp);
+                    break;
+                case Constants.THROTTLE:
+                    String throttle = (String) msg.obj;
+                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + throttle);
+                    break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
                     mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
