@@ -40,15 +40,17 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
 
     private BluetoothAdapter mBluetoothAdapter = null;
     private UslugaBluetooth mChatService = null;
-    private ArrayAdapter<String> mConversationArrayAdapter;
     private StringBuffer mOutStringBuffer;
     private String mConnectedDeviceName = null;
 
-    // Layout Views
-    private ListView mConversationView;
-    private EditText mOutEditText;
-    private Button mSendButton;
-    private Button setupButton;
+    private Button btnPreSetup;
+    private Button btnStartTelemetry;
+    private TextView tvRpm;
+    private TextView tvLoad;
+    private TextView tvCoolantTemp;
+    private TextView tvSpeed;
+    private TextView tvAirTemp;
+    private TextView tvThrottle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,31 +87,19 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     private void setupChat() {
         Log.d(TAG, "setupChat()");
 
-        // Initialize the array adapter for the conversation thread
-        mConversationArrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.message);
-
-        mConversationView.setAdapter(mConversationArrayAdapter);
-
-        // Initialize the compose field with a listener for the return key
-        mOutEditText.setOnEditorActionListener(mWriteListener);
-
-        // Initialize the send button with a listener that for click events
-        mSendButton.setOnClickListener(new View.OnClickListener() {
+        btnPreSetup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Send a message using content of the edit text widget
                 View view = getView();
                 if (null != view) {
-                    TextView textView = (TextView) view.findViewById(R.id.edit_text_out);
-                    String message = textView.getText().toString();
-                    sendMessage(message);
+                    mChatService.preSetup();
                 }
             }
         });
 
-        setupButton.setOnClickListener(new View.OnClickListener() {
+        btnStartTelemetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    View view = getView();
+                View view = getView();
                 if(view != null){
                     mChatService.beginTelemetry();
                 }
@@ -122,21 +112,6 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
     }
-
-    /**
-     * The action listener for the EditText widget, to listen for the return key
-     */
-    private TextView.OnEditorActionListener mWriteListener
-            = new TextView.OnEditorActionListener() {
-        public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-            // If the action is a key-up event on the return key, send the message
-            if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
-                String message = view.getText().toString();
-                sendMessage(message);
-            }
-            return true;
-        }
-    };
 
     /**
      * Sends a message.
@@ -152,14 +127,10 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
 
         // Check that there's actually something to send
         if (message.length() > 0) {
-            //message = message + "\r";
-            // Get the message bytes and tell the BluetoothChatService to write
-            //byte[] send = message.getBytes();
             mChatService.write(message);
 
-            // Reset out string buffer to zero and clear the edit text field
+            // Reset out string buffer to zero
             mOutStringBuffer.setLength(0);
-            mOutEditText.setText(mOutStringBuffer);
         }
     }
 
@@ -175,7 +146,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
                     switch (msg.arg1) {
                         case UslugaBluetooth.STATE_CONNECTED:
                             setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            mConversationArrayAdapter.clear();
+                            //TODO: Wyzerowanie liczników
                             break;
                         case UslugaBluetooth.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
@@ -190,37 +161,44 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
                     byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
-                    mConversationArrayAdapter.add("Ja: " + writeMessage);
+                    //mConversationArrayAdapter.add("Ja: " + writeMessage);
+                    //TODO: Zapisanie wysłanych danych do logów
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + readMessage);
+                    //TODO: Zapis do logów
                     break;
                 case Constants.RPM:
                     String rpm = (String) msg.obj;
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + rpm);
+                    tvRpm.setText(rpm);
+                    //TODO: Zapis do logów
                     break;
                 case Constants.LOAD:
                     String load = (String) msg.obj;
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + load);
+                    tvLoad.setText(load);
+                    //TODO: Zapis do logów
                     break;
                 case Constants.COOLANTTEMP:
                     String coolantTemp = (String) msg.obj;
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + coolantTemp);
+                    tvCoolantTemp.setText(coolantTemp);
+                    //TODO: Zapis do logów
                     break;
                 case Constants.SPEED:
                     String speed = (String) msg.obj;
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + speed);
+                    tvSpeed.setText(speed);
+                    //TODO: Zapis do logów
                     break;
                 case Constants.AIRTEMP:
                     String airTemp = (String) msg.obj;
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + airTemp);
+                    tvAirTemp.setText(airTemp);
+                    //TODO: Zapis do logów
                     break;
                 case Constants.THROTTLE:
                     String throttle = (String) msg.obj;
-                    mConversationArrayAdapter.add(mConnectedDeviceName + ": " + throttle);
+                    tvThrottle.setText(throttle);
+                    //TODO: Zapis do logów
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -391,9 +369,13 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mConversationView = (ListView) view.findViewById(R.id.in);
-        mOutEditText = (EditText) view.findViewById(R.id.edit_text_out);
-        mSendButton = (Button) view.findViewById(R.id.button_send);
-        setupButton = (Button) view.findViewById(R.id.button_setup);
+        btnPreSetup = (Button) view.findViewById(R.id.btnPreSetup);
+        btnStartTelemetry = (Button) view.findViewById(R.id.btnStartTel);
+        tvRpm = (TextView) view.findViewById(R.id.tvRpm);
+        tvLoad = (TextView) view.findViewById(R.id.tvLoad);
+        tvCoolantTemp = (TextView) view.findViewById(R.id.tvCoolantTepm);
+        tvSpeed = (TextView) view.findViewById(R.id.tvSpeed);
+        tvAirTemp = (TextView) view.findViewById(R.id.tvTempAirFlow);
+        tvThrottle = (TextView) view.findViewById(R.id.tvThrottle);
     }
 }
