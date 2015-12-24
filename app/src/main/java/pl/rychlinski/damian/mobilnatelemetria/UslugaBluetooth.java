@@ -288,7 +288,7 @@ public class UslugaBluetooth {
             } catch (IOException e) {
                 Log.e(TAG, "close() of connect socket failed", e);
             }
-            decoderPIDThread.interrupt();
+            //decoderPIDThread.interrupt();
         }
 
         //Handler do komunikacji z wątkiem dekodującym PIDY
