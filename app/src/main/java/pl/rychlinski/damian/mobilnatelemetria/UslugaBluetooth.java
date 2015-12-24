@@ -106,6 +106,15 @@ public class UslugaBluetooth {
         r.startTelemetry();
     }
 
+    public void preSetupELM(){
+        ConnectedThread r;
+        synchronized (this){
+            if (mState != STATE_CONNECTED) return;
+            r = mConnectedThread;
+        }
+        r.preSetup();
+    }
+
     /**
      * This thread runs during a connection with a remote device.
      * It handles all incoming and outgoing transmissions.
@@ -236,6 +245,11 @@ public class UslugaBluetooth {
          */
         public void startTelemetry(){
             addToQueue("01 0C; 01 04; 01 05; 01 0D; 01 0F; 01 11");
+            fireCmd();
+        }
+
+        public void preSetup(){
+            addToQueue("atz; atl0; ate0; ath0; atat1; atstff; atsp0; atdp");
             fireCmd();
         }
 

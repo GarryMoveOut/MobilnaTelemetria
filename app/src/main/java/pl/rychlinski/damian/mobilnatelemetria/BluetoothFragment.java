@@ -91,7 +91,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 View view = getView();
                 if (null != view) {
-                    mChatService.preSetup();
+                    mChatService.preSetupELM();
                 }
             }
         });
