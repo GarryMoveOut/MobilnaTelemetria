@@ -365,4 +365,6 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         tvAirTemp = (TextView) view.findViewById(R.id.tvTempAirFlow);
         tvThrottle = (TextView) view.findViewById(R.id.tvThrottle);
     }
+
+
 }
