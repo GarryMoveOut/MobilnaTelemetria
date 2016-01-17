@@ -27,7 +27,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidplot.Plot;
+import com.androidplot.xy.XYPlot;
+
 import org.w3c.dom.Text;
+
+import java.util.Observable;
+import java.util.Observer;
 
 
 public class BluetoothFragment extends android.support.v4.app.Fragment {
@@ -50,6 +56,11 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     private TextView tvSpeed;
     private TextView tvAirTemp;
     private TextView tvThrottle;
+
+    private XYPlot dynamicPlot;
+    private MyPlotUpdater plotUpdater;
+    //SampleDynamicXYDatasource data;
+    private Thread myThread;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -364,6 +375,25 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         tvSpeed = (TextView) view.findViewById(R.id.tvSpeed);
         tvAirTemp = (TextView) view.findViewById(R.id.tvTempAirFlow);
         tvThrottle = (TextView) view.findViewById(R.id.tvThrottle);
+
+        // get handles to our View defined in layout.xml:
+        dynamicPlot = (XYPlot) view.findViewById(R.id.dynamicXYPlot);
+    }
+
+    //Odpowiada za wykres
+
+    // redraws a plot whenever an update is received:
+    private class MyPlotUpdater implements Observer {
+        Plot plot;
+
+        public MyPlotUpdater(Plot plot) {
+            this.plot = plot;
+        }
+
+        @Override
+        public void update(Observable o, Object arg) {
+            plot.redraw();
+        }
     }
 
 

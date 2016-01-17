@@ -1,140 +1,98 @@
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ap="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
     tools:context="pl.rychlinski.damian.mobilnatelemetria.BluetoothFragment">
 
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Obroty:"
-            android:id="@+id/textView"
-            android:layout_column="0" />
+            android:id="@+id/textView" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="0"
-            android:id="@+id/tvRpm"
-            android:layout_column="1" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:id="@+id/tvRpm" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Obciążenie"
-            android:id="@+id/textView2"
-            android:layout_column="0" />
+            android:id="@+id/textView2" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="0"
-            android:id="@+id/tvLoad"
-            android:layout_column="1" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:id="@+id/tvLoad" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Temp. płynu chłodniczego:"
-            android:id="@+id/textView3"
-            android:layout_column="0" />
+            android:id="@+id/textView3" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="0"
-            android:id="@+id/tvCoolantTepm"
-            android:layout_column="1" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:id="@+id/tvCoolantTepm" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Prędkość:"
-            android:id="@+id/textView4"
-            android:layout_column="0" />
+            android:id="@+id/textView4" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="0"
-            android:id="@+id/tvSpeed"
-            android:layout_column="1" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:id="@+id/tvSpeed" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Temp. powietrza zassanego:"
-            android:id="@+id/textView5"
-            android:layout_column="0" />
+            android:id="@+id/textView5"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="0"
-            android:id="@+id/tvTempAirFlow"
-            android:layout_column="1" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:id="@+id/tvTempAirFlow" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Pozycja przepustnicy:"
-            android:id="@+id/textView6"
-            android:layout_column="0" />
+            android:id="@+id/textView6" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="0"
-            android:id="@+id/tvThrottle"
-            android:layout_column="1" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:id="@+id/tvThrottle" />
 
         <Button
             android:layout_width="wrap_content"
@@ -142,11 +100,6 @@
             android:text="Ustawienia wstępne"
             android:id="@+id/btnPreSetup"
             android:layout_column="0" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <Button
             android:layout_width="wrap_content"
@@ -154,5 +107,27 @@
             android:text="Monitoruj telemetrie"
             android:id="@+id/btnStartTel"
             android:layout_column="0" />
-    </TableRow>
-</TableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <com.androidplot.xy.XYPlot
+            style="@style/simple_xy"
+            android:id="@+id/dynamicXYPlot"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            androidplot.renderMode="use_background_thread"
+            ap:label="A Dynamic XY Plot"
+            ap:domainLabel="Domain"
+            ap:rangeLabel="Range"
+            ap:legendTextSize="15sp"
+            ap:legendIconHeight="15dp"
+            ap:legendIconWidth="15dp"
+            ap:legendHeight="25dp"
+            ap:legendAnchorPosition="right_bottom"/>
+
+    </LinearLayout>
+
+</LinearLayout>
