@@ -164,54 +164,59 @@ public class UslugaBluetooth {
                                 .sendToTarget();
 
                         List<String> listBytesAnsw = Arrays.asList(readed.trim().split("\\s+"));
+                        try {
+                            //Obroty silnika
+                            if (listBytesAnsw.get(1).equals("0C")) {
+                                int A = Integer.parseInt(listBytesAnsw.get(2), 16);
+                                int B = Integer.parseInt(listBytesAnsw.get(3), 16);
+                                float rpm = (float) (A * 255 + B) / 4;
+                                mHandler.obtainMessage(Constants.RPM, String.format("%.2f", rpm)).sendToTarget();
+                                addToQueue("01 0C");
+                            }
 
-                        //Obroty silnika
-                        if(listBytesAnsw.get(1).equals("0C")){
-                            int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            int B = Integer.parseInt(listBytesAnsw.get(3), 16);
-                            float rpm = (float) (A*255+B)/4;
-                            mHandler.obtainMessage(Constants.RPM, String.format("%.2f", rpm)).sendToTarget();
-                            addToQueue("01 0C");
+                            //Obciążenie silnika
+                            if (listBytesAnsw.get(1).equals("04")) {
+                                int A = Integer.parseInt(listBytesAnsw.get(2), 16);
+                                float load = (float) A * 100 / 255;
+                                mHandler.obtainMessage(Constants.LOAD, String.format("%.2f", load)).sendToTarget();
+                                addToQueue("01 04");
+                            }
+
+                            //Temperatura płynu chłodniczego
+                            if (listBytesAnsw.get(1).equals("05")) {
+                                int A = Integer.parseInt(listBytesAnsw.get(2), 16);
+                                int coolantTemp = A - 40;
+                                mHandler.obtainMessage(Constants.COOLANTTEMP, Integer.toString(coolantTemp)).sendToTarget();
+                                addToQueue("01 05");
+                            }
+
+                            //Prędkość pojazdu
+                            if (listBytesAnsw.get(1).equals("0D")) {
+                                int speed = Integer.parseInt(listBytesAnsw.get(2), 16);
+                                mHandler.obtainMessage(Constants.SPEED, Integer.toString(speed)).sendToTarget();
+                                addToQueue("01 0D");
+                            }
+
+                            //Temperatura powietrza zassanego
+                            if (listBytesAnsw.get(1).equals("0F")) {
+                                int A = Integer.parseInt(listBytesAnsw.get(2), 16);
+                                int airTemp = A - 40;
+                                mHandler.obtainMessage(Constants.AIRTEMP, Integer.toString(airTemp)).sendToTarget();
+                                addToQueue("01 0F");
+                            }
+
+                            //Pozycja przepustnicy
+                            if (listBytesAnsw.get(1).equals("11")) {
+                                int A = Integer.parseInt(listBytesAnsw.get(2), 16);
+                                float throttle = (float) A * 100 / 255;
+                                mHandler.obtainMessage(Constants.THROTTLE, String.format("%.2f", throttle)).sendToTarget();
+                                addToQueue("01 11");
+                            }
+                        }catch (IndexOutOfBoundsException ex){
+                            Log.e(TAG, "OutOfBound", ex);
+                            Log.i("Readed:", readed);
                         }
 
-                        //Obciążenie silnika
-                        if(listBytesAnsw.get(1).equals("04")){
-                            int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            float load = (float) A*100/255;
-                            mHandler.obtainMessage(Constants.LOAD, String.format("%.2f", load)).sendToTarget();
-                            addToQueue("01 04");
-                        }
-
-                        //Temperatura płynu chłodniczego
-                        if(listBytesAnsw.get(1).equals("05")){
-                            int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            int coolantTemp = A-40;
-                            mHandler.obtainMessage(Constants.COOLANTTEMP, Integer.toString(coolantTemp) ).sendToTarget();
-                            addToQueue("01 05");
-                        }
-
-                        //Prędkość pojazdu
-                        if(listBytesAnsw.get(1).equals("0D")){
-                            int speed = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            mHandler.obtainMessage(Constants.SPEED, Integer.toString(speed) ).sendToTarget();
-                            addToQueue("01 0D");
-                        }
-
-                        //Temperatura powietrza zassanego
-                        if(listBytesAnsw.get(1).equals("0F")){
-                            int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            int airTemp = A-40;
-                            mHandler.obtainMessage(Constants.AIRTEMP, Integer.toString(airTemp) ).sendToTarget();
-                            addToQueue("01 0F");
-                        }
-
-                        //Pozycja przepustnicy
-                        if(listBytesAnsw.get(1).equals("11")){
-                            int A = Integer.parseInt(listBytesAnsw.get(2), 16);
-                            float throttle = (float) A*100/255;
-                            mHandler.obtainMessage(Constants.THROTTLE, String.format("%.2f", throttle) ).sendToTarget();
-                            addToQueue("01 11");
-                        }
 
                         if(readed.contains(">")){
                             fireCmd();
@@ -255,8 +260,7 @@ public class UslugaBluetooth {
                     mmOutStream.write(buffer);
 
                     // Share the sent message back to the UI Activity
-                    mHandler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer)
-                            .sendToTarget();
+                    //mHandler.obtainMessage(Constants.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
                 }
             } catch (IOException e) {
                 Log.e(TAG, "Exception during fire command", e);
