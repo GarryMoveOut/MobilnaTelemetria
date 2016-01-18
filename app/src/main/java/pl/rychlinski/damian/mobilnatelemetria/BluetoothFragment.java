@@ -99,7 +99,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         azimuthHistorySeries.useImplicitXVals();
 
         //Ustawienia wykresu
-        aprHistoryPlot.setRangeBoundaries(-180, 359, BoundaryMode.FIXED);
+        aprHistoryPlot.setRangeBoundaries(800, 5000, BoundaryMode.FIXED);
         aprHistoryPlot.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);
         aprHistoryPlot.addSeries(azimuthHistorySeries,
                 new LineAndPointFormatter(
