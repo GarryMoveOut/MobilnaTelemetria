@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
@@ -28,10 +31,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidplot.Plot;
+import com.androidplot.util.PixelUtils;
+import com.androidplot.util.Redrawer;
+import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYSeries;
+import com.androidplot.xy.XYStepMode;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -48,6 +60,13 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     private StringBuffer mOutStringBuffer;
     private String mConnectedDeviceName = null;
 
+    private float rpm;
+    private float load;
+    private int coolant;
+    private int speed;
+    private int airTemp;
+    private float throttle;
+
     private Button btnPreSetup;
     private Button btnStartTelemetry;
     private TextView tvRpm;
@@ -57,10 +76,10 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     private TextView tvAirTemp;
     private TextView tvThrottle;
 
-    private XYPlot dynamicPlot;
-    private MyPlotUpdater plotUpdater;
-    //SampleDynamicXYDatasource data;
-    private Thread myThread;
+    private static final int HISTORY_SIZE = 300;            // number of points to plot in history
+    private XYPlot aprHistoryPlot = null;                   // wykres rpm
+    private SimpleXYSeries azimuthHistorySeries = null;     // seria RPM
+    private Redrawer redrawer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +94,29 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             activity.finish();
         }
+
+        azimuthHistorySeries = new SimpleXYSeries("Az.");
+        azimuthHistorySeries.useImplicitXVals();
+
+        //Ustawienia wykresu
+        aprHistoryPlot.setRangeBoundaries(-180, 359, BoundaryMode.FIXED);
+        aprHistoryPlot.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);
+        aprHistoryPlot.addSeries(azimuthHistorySeries,
+                new LineAndPointFormatter(
+                        Color.rgb(100, 100, 200), null, null, null));
+        //aprHistoryPlot.addSeries(pitchHistorySeries, new LineAndPointFormatter(Color.rgb(100, 200, 100), null, null, null));
+        //aprHistoryPlot.addSeries(rollHistorySeries, new LineAndPointFormatter(Color.rgb(200, 100, 100), null, null, null));
+        aprHistoryPlot.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
+        aprHistoryPlot.setDomainStepValue(HISTORY_SIZE / 10);
+        aprHistoryPlot.setTicksPerRangeLabel(3);
+        aprHistoryPlot.setDomainLabel("Sample Index");
+        aprHistoryPlot.getDomainLabelWidget().pack();
+        aprHistoryPlot.setRangeLabel("Angle (Degs)");
+        aprHistoryPlot.getRangeLabelWidget().pack();
+
+        aprHistoryPlot.setRangeValueFormat(new DecimalFormat("#"));
+        aprHistoryPlot.setDomainValueFormat(new DecimalFormat("#"));
+        redrawer = new Redrawer(Arrays.asList(new Plot[]{aprHistoryPlot}), 100, false);
     }
 
     @Override
@@ -89,6 +131,12 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         } else if (mChatService == null) {
             setupChat();
         }
+    }
+
+    @Override
+    public void onPause() {
+        redrawer.pause();
+        super.onPause();
     }
 
     /**
@@ -181,8 +229,10 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
                     //TODO: Zapis do logów
                     break;
                 case Constants.RPM:
-                    String rpm = (String) msg.obj;
-                    tvRpm.setText(rpm);
+                    String sRpm = (String) msg.obj;
+                    rpm = Float.valueOf(sRpm);
+                    azimuthHistorySeries.addLast(null, rpm);
+                    tvRpm.setText(sRpm);
                     //TODO: Zapis do logów
                     break;
                 case Constants.LOAD:
@@ -338,6 +388,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        redrawer.finish();
         if (mChatService != null) {
             mChatService.stop();
         }
@@ -346,6 +397,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        redrawer.start();
 
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
@@ -376,25 +428,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         tvAirTemp = (TextView) view.findViewById(R.id.tvTempAirFlow);
         tvThrottle = (TextView) view.findViewById(R.id.tvThrottle);
 
-        // get handles to our View defined in layout.xml:
-        dynamicPlot = (XYPlot) view.findViewById(R.id.dynamicXYPlot);
+        // setup the APR History plot:
+        aprHistoryPlot = (XYPlot) view.findViewById(R.id.aprHistoryPlot);
     }
-
-    //Odpowiada za wykres
-
-    // redraws a plot whenever an update is received:
-    private class MyPlotUpdater implements Observer {
-        Plot plot;
-
-        public MyPlotUpdater(Plot plot) {
-            this.plot = plot;
-        }
-
-        @Override
-        public void update(Observable o, Object arg) {
-            plot.redraw();
-        }
-    }
-
-
 }
