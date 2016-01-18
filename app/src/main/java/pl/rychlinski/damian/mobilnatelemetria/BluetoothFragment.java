@@ -6,46 +6,32 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidplot.Plot;
-import com.androidplot.util.PixelUtils;
 import com.androidplot.util.Redrawer;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.XYStepMode;
-
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.Observable;
-import java.util.Observer;
 
 
 public class BluetoothFragment extends android.support.v4.app.Fragment {
@@ -77,8 +63,8 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     private TextView tvThrottle;
 
     private static final int HISTORY_SIZE = 300;            // number of points to plot in history
-    private XYPlot aprHistoryPlot = null;                   // wykres rpm
-    private SimpleXYSeries azimuthHistorySeries = null;     // seria RPM
+    private XYPlot rpmPlotGraph = null;                   // wykres rpm
+    private SimpleXYSeries rpmSeries = null;     // seria RPM
     private Redrawer redrawer;
 
     @Override
@@ -95,28 +81,28 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
             activity.finish();
         }
 
-        azimuthHistorySeries = new SimpleXYSeries("Az.");
-        azimuthHistorySeries.useImplicitXVals();
+        rpmSeries = new SimpleXYSeries("RPM");
+        rpmSeries.useImplicitXVals();
 
         //Ustawienia wykresu
-        aprHistoryPlot.setRangeBoundaries(800, 5000, BoundaryMode.FIXED);
-        aprHistoryPlot.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);
-        aprHistoryPlot.addSeries(azimuthHistorySeries,
+        rpmPlotGraph.setRangeBoundaries(800, 5000, BoundaryMode.FIXED);
+        rpmPlotGraph.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);
+        rpmPlotGraph.addSeries(rpmSeries,
                 new LineAndPointFormatter(
                         Color.rgb(100, 100, 200), null, null, null));
         //aprHistoryPlot.addSeries(pitchHistorySeries, new LineAndPointFormatter(Color.rgb(100, 200, 100), null, null, null));
         //aprHistoryPlot.addSeries(rollHistorySeries, new LineAndPointFormatter(Color.rgb(200, 100, 100), null, null, null));
-        aprHistoryPlot.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
-        aprHistoryPlot.setDomainStepValue(HISTORY_SIZE / 10);
-        aprHistoryPlot.setTicksPerRangeLabel(3);
-        aprHistoryPlot.setDomainLabel("Sample Index");
-        aprHistoryPlot.getDomainLabelWidget().pack();
-        aprHistoryPlot.setRangeLabel("Angle (Degs)");
-        aprHistoryPlot.getRangeLabelWidget().pack();
+        rpmPlotGraph.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
+        rpmPlotGraph.setDomainStepValue(HISTORY_SIZE / 10);
+        rpmPlotGraph.setTicksPerRangeLabel(3);
+        rpmPlotGraph.setDomainLabel("Sample Index");
+        rpmPlotGraph.getDomainLabelWidget().pack();
+        rpmPlotGraph.setRangeLabel("Angle (Degs)");
+        rpmPlotGraph.getRangeLabelWidget().pack();
 
-        aprHistoryPlot.setRangeValueFormat(new DecimalFormat("#"));
-        aprHistoryPlot.setDomainValueFormat(new DecimalFormat("#"));
-        redrawer = new Redrawer(Arrays.asList(new Plot[]{aprHistoryPlot}), 100, false);
+        rpmPlotGraph.setRangeValueFormat(new DecimalFormat("#"));
+        rpmPlotGraph.setDomainValueFormat(new DecimalFormat("#"));
+        redrawer = new Redrawer(Arrays.asList(new Plot[]{rpmPlotGraph}), 100, false);
     }
 
     @Override
@@ -231,7 +217,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
                 case Constants.RPM:
                     String sRpm = (String) msg.obj;
                     rpm = Float.valueOf(sRpm);
-                    azimuthHistorySeries.addLast(null, rpm);
+                    rpmSeries.addLast(null, rpm);
                     tvRpm.setText(sRpm);
                     //TODO: Zapis do logów
                     break;
@@ -429,6 +415,6 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         tvThrottle = (TextView) view.findViewById(R.id.tvThrottle);
 
         // setup the APR History plot:
-        aprHistoryPlot = (XYPlot) view.findViewById(R.id.aprHistoryPlot);
+        rpmPlotGraph = (XYPlot) view.findViewById(R.id.rpmHistoryPlot);
     }
 }
