@@ -12,7 +12,6 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,6 +45,8 @@ public class UslugaBluetooth {
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
+
+    public static final List<String> CMD_ASK_LIST = Arrays.asList("01 0C", "01 04", "01 05", "01 0D", "01 0F", "01 11");
 
     /**
      * Constructor. Prepares a new BluetoothChat session.
@@ -124,6 +125,7 @@ public class UslugaBluetooth {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
         private Queue<byte[]> cmdQueue;
+        private boolean preSetupON;
 
         public ConnectedThread(BluetoothSocket socket, String socketType) {
             Log.d(TAG, "create ConnectedThread: " + socketType);
@@ -148,6 +150,7 @@ public class UslugaBluetooth {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
             int bytes;
+            int cmdPointer = 0;
 
             StringBuilder readMessage = new StringBuilder();
             // Keep listening to the InputStream while connected
@@ -171,7 +174,7 @@ public class UslugaBluetooth {
                                 int B = Integer.parseInt(listBytesAnsw.get(3), 16);
                                 float rpm = (float) (A * 255 + B) / 4;
                                 mHandler.obtainMessage(Constants.RPM, String.format("%.2f", rpm)).sendToTarget();
-                                addToQueue("01 0C");
+                                //addToQueue("01 0C");
                             }
 
                             //Obciążenie silnika
@@ -179,7 +182,7 @@ public class UslugaBluetooth {
                                 int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                                 float load = (float) A * 100 / 255;
                                 mHandler.obtainMessage(Constants.LOAD, String.format("%.2f", load)).sendToTarget();
-                                addToQueue("01 04");
+                                //addToQueue("01 04");
                             }
 
                             //Temperatura płynu chłodniczego
@@ -187,14 +190,14 @@ public class UslugaBluetooth {
                                 int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                                 int coolantTemp = A - 40;
                                 mHandler.obtainMessage(Constants.COOLANTTEMP, Integer.toString(coolantTemp)).sendToTarget();
-                                addToQueue("01 05");
+                                //addToQueue("01 05");
                             }
 
                             //Prędkość pojazdu
                             if (listBytesAnsw.get(1).equals("0D")) {
                                 int speed = Integer.parseInt(listBytesAnsw.get(2), 16);
                                 mHandler.obtainMessage(Constants.SPEED, Integer.toString(speed)).sendToTarget();
-                                addToQueue("01 0D");
+                                //addToQueue("01 0D");
                             }
 
                             //Temperatura powietrza zassanego
@@ -202,7 +205,7 @@ public class UslugaBluetooth {
                                 int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                                 int airTemp = A - 40;
                                 mHandler.obtainMessage(Constants.AIRTEMP, Integer.toString(airTemp)).sendToTarget();
-                                addToQueue("01 0F");
+                                //addToQueue("01 0F");
                             }
 
                             //Pozycja przepustnicy
@@ -210,7 +213,7 @@ public class UslugaBluetooth {
                                 int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                                 float throttle = (float) A * 100 / 255;
                                 mHandler.obtainMessage(Constants.THROTTLE, String.format("%.2f", throttle)).sendToTarget();
-                                addToQueue("01 11");
+                                //addToQueue("01 11");
                             }
                         }catch (IndexOutOfBoundsException ex){
                             Log.e(TAG, "OutOfBound", ex);
@@ -219,7 +222,14 @@ public class UslugaBluetooth {
 
 
                         if(readed.contains(">")){
-                            fireCmd();
+                            if(!preSetupON){
+                                addToQueue(CMD_ASK_LIST.get(cmdPointer));
+                                cmdPointer++;
+                                if(cmdPointer>5) cmdPointer = 0;
+                            }else{
+                                fireCmd();
+                            }
+
                         }
                         readMessage.setLength(0);
                     }
@@ -235,14 +245,16 @@ public class UslugaBluetooth {
          * Komenda rozpoczynająca monitorowanie parametrów pracy.
          */
         public void startTelemetry(){
-            addToQueue("01 0C; 01 04; 01 05; 01 0D; 01 0F; 01 11");
-            fireCmd();
+            //addToQueue("01 0C; 01 04; 01 05; 01 0D; 01 0F; 01 11");
+            //fireCmd();
+            preSetupON = false;
         }
 
         /**
          * Przesłanie koment ustawiających mikrokontroler ELM
          */
         public void preSetup(){
+            preSetupON = true;
             addToQueue("atz; atl0; ate0; ath0; atat1; atstff; atsp0; atdp");
             fireCmd();
         }

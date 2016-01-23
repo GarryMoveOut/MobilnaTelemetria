@@ -85,7 +85,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         rpmSeries.useImplicitXVals();
 
         //Ustawienia wykresu
-        rpmPlotGraph.setRangeBoundaries(800, 5000, BoundaryMode.FIXED);
+        rpmPlotGraph.setRangeBoundaries(800, 5000, BoundaryMode.FIXED); //TODO: FIX
         rpmPlotGraph.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);
         rpmPlotGraph.addSeries(rpmSeries,
                 new LineAndPointFormatter(
@@ -390,10 +390,10 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
         if (mChatService != null) {
             // Only if the state is STATE_NONE, do we know that we haven't started already
-            if (mChatService.getState() == UslugaBluetooth.STATE_NONE) {
+            //if (mChatService.getState() == UslugaBluetooth.STATE_NONE) {
                 // Start the Bluetooth chat services
                 //mChatService.start(); //TODO Serwer?
-            }
+            //}
         }
     }
 
