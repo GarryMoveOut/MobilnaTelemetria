@@ -80,29 +80,6 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             activity.finish();
         }
-
-        rpmSeries = new SimpleXYSeries("RPM");
-        rpmSeries.useImplicitXVals();
-
-        //Ustawienia wykresu
-        rpmPlotGraph.setRangeBoundaries(800, 5000, BoundaryMode.FIXED); //TODO: FIX
-        rpmPlotGraph.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);
-        rpmPlotGraph.addSeries(rpmSeries,
-                new LineAndPointFormatter(
-                        Color.rgb(100, 100, 200), null, null, null));
-        //aprHistoryPlot.addSeries(pitchHistorySeries, new LineAndPointFormatter(Color.rgb(100, 200, 100), null, null, null));
-        //aprHistoryPlot.addSeries(rollHistorySeries, new LineAndPointFormatter(Color.rgb(200, 100, 100), null, null, null));
-        rpmPlotGraph.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
-        rpmPlotGraph.setDomainStepValue(HISTORY_SIZE / 10);
-        rpmPlotGraph.setTicksPerRangeLabel(3);
-        rpmPlotGraph.setDomainLabel("Sample Index");
-        rpmPlotGraph.getDomainLabelWidget().pack();
-        rpmPlotGraph.setRangeLabel("Angle (Degs)");
-        rpmPlotGraph.getRangeLabelWidget().pack();
-
-        rpmPlotGraph.setRangeValueFormat(new DecimalFormat("#"));
-        rpmPlotGraph.setDomainValueFormat(new DecimalFormat("#"));
-        redrawer = new Redrawer(Arrays.asList(new Plot[]{rpmPlotGraph}), 100, false);
     }
 
     @Override
@@ -416,5 +393,29 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
 
         // setup the APR History plot:
         rpmPlotGraph = (XYPlot) view.findViewById(R.id.rpmHistoryPlot);
+
+        rpmSeries = new SimpleXYSeries("RPM");
+        rpmSeries.useImplicitXVals();
+
+        rpmSeries.addLast(1, 1000);
+        //Ustawienia wykresu
+        rpmPlotGraph.setRangeBoundaries(800, 5000, BoundaryMode.FIXED); //TODO: FIX
+        rpmPlotGraph.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);
+        rpmPlotGraph.addSeries(rpmSeries,
+                new LineAndPointFormatter(
+                        Color.rgb(100, 100, 200), null, null, null));
+        //aprHistoryPlot.addSeries(pitchHistorySeries, new LineAndPointFormatter(Color.rgb(100, 200, 100), null, null, null));
+        //aprHistoryPlot.addSeries(rollHistorySeries, new LineAndPointFormatter(Color.rgb(200, 100, 100), null, null, null));
+        rpmPlotGraph.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
+        rpmPlotGraph.setDomainStepValue(HISTORY_SIZE / 10);
+        rpmPlotGraph.setTicksPerRangeLabel(3);
+        rpmPlotGraph.setDomainLabel("Sample Index");
+        rpmPlotGraph.getDomainLabelWidget().pack();
+        rpmPlotGraph.setRangeLabel("Angle (Degs)");
+        rpmPlotGraph.getRangeLabelWidget().pack();
+
+        rpmPlotGraph.setRangeValueFormat(new DecimalFormat("#"));
+        rpmPlotGraph.setDomainValueFormat(new DecimalFormat("#"));
+        redrawer = new Redrawer(Arrays.asList(new Plot[]{rpmPlotGraph}), 100, false);
     }
 }
