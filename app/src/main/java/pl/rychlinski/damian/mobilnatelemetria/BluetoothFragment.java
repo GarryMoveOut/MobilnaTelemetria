@@ -62,11 +62,6 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     private TextView tvAirTemp;
     private TextView tvThrottle;
 
-    private static final int HISTORY_SIZE = 300;            // number of points to plot in history
-    private XYPlot rpmPlotGraph = null;                   // wykres rpm
-    private SimpleXYSeries rpmSeries = null;     // seria RPM
-    private Redrawer redrawer;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +93,6 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onPause() {
-        redrawer.pause();
         super.onPause();
     }
 
@@ -194,7 +188,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
                 case Constants.RPM:
                     String sRpm = (String) msg.obj;
                     rpm = Float.valueOf(sRpm);
-                    rpmSeries.addLast(null, rpm);
+                    //rpmSeries.addLast(null, rpm);
                     tvRpm.setText(sRpm);
                     //TODO: Zapis do logów
                     break;
@@ -351,7 +345,6 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        redrawer.finish();
         if (mChatService != null) {
             mChatService.stop();
         }
@@ -360,7 +353,6 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        redrawer.start();
 
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
@@ -375,12 +367,6 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_bluetooth, container, false);
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         btnPreSetup = (Button) view.findViewById(R.id.btnPreSetup);
         btnStartTelemetry = (Button) view.findViewById(R.id.btnStartTel);
@@ -390,32 +376,5 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         tvSpeed = (TextView) view.findViewById(R.id.tvSpeed);
         tvAirTemp = (TextView) view.findViewById(R.id.tvTempAirFlow);
         tvThrottle = (TextView) view.findViewById(R.id.tvThrottle);
-
-        // setup the APR History plot:
-        rpmPlotGraph = (XYPlot) view.findViewById(R.id.rpmHistoryPlot);
-
-        rpmSeries = new SimpleXYSeries("RPM");
-        rpmSeries.useImplicitXVals();
-
-        rpmSeries.addLast(1, 1000);
-        //Ustawienia wykresu
-        rpmPlotGraph.setRangeBoundaries(800, 5000, BoundaryMode.FIXED); //TODO: FIX
-        rpmPlotGraph.setDomainBoundaries(0, HISTORY_SIZE, BoundaryMode.FIXED);
-        rpmPlotGraph.addSeries(rpmSeries,
-                new LineAndPointFormatter(
-                        Color.rgb(100, 100, 200), null, null, null));
-        //aprHistoryPlot.addSeries(pitchHistorySeries, new LineAndPointFormatter(Color.rgb(100, 200, 100), null, null, null));
-        //aprHistoryPlot.addSeries(rollHistorySeries, new LineAndPointFormatter(Color.rgb(200, 100, 100), null, null, null));
-        rpmPlotGraph.setDomainStepMode(XYStepMode.INCREMENT_BY_VAL);
-        rpmPlotGraph.setDomainStepValue(HISTORY_SIZE / 10);
-        rpmPlotGraph.setTicksPerRangeLabel(3);
-        rpmPlotGraph.setDomainLabel("Sample Index");
-        rpmPlotGraph.getDomainLabelWidget().pack();
-        rpmPlotGraph.setRangeLabel("Angle (Degs)");
-        rpmPlotGraph.getRangeLabelWidget().pack();
-
-        rpmPlotGraph.setRangeValueFormat(new DecimalFormat("#"));
-        rpmPlotGraph.setDomainValueFormat(new DecimalFormat("#"));
-        redrawer = new Redrawer(Arrays.asList(new Plot[]{rpmPlotGraph}), 100, false);
     }
 }
