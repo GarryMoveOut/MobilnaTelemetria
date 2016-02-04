@@ -1,13 +1,13 @@
 package pl.rychlinski.damian.mobilnatelemetria;
 
-import android.support.v4.app.FragmentTransaction;
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     public static final String TAG = "MainActivity";
 
 
@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
             BluetoothFragment fragment = new BluetoothFragment();
             transaction.replace(R.id.fragment_bluetooth, fragment);
             transaction.commit();

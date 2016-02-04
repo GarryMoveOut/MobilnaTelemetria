@@ -2,15 +2,13 @@ package pl.rychlinski.damian.mobilnatelemetria;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,19 +20,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidplot.Plot;
-import com.androidplot.util.Redrawer;
-import com.androidplot.xy.BoundaryMode;
-import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYStepMode;
 
-import java.text.DecimalFormat;
-import java.util.Arrays;
-
-
-public class BluetoothFragment extends android.support.v4.app.Fragment {
+public class BluetoothFragment extends Fragment {
     private static final String TAG = "BluetoothFragment";
 
     // Intent request codes
@@ -71,7 +58,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
 
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
-            FragmentActivity activity = getActivity();
+            Activity activity = getActivity();
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             activity.finish();
         }
@@ -155,7 +142,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            FragmentActivity activity = getActivity();
+            Activity activity = getActivity();
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
@@ -241,7 +228,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
      * @param resId a string resource ID
      */
     private void setStatus(int resId) {
-        FragmentActivity activity = getActivity();
+        Activity activity = getActivity();
         if (null == activity) {
             return;
         }
@@ -257,7 +244,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
      * @param subTitle status
      */
     private void setStatus(CharSequence subTitle) {
-        FragmentActivity activity = getActivity();
+        Activity activity = getActivity();
         if (null == activity) {
             return;
         }
@@ -367,7 +354,9 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        View view = inflater.inflate(R.layout.fragment_bluetooth, container, false);
+
         btnPreSetup = (Button) view.findViewById(R.id.btnPreSetup);
         btnStartTelemetry = (Button) view.findViewById(R.id.btnStartTel);
         tvRpm = (TextView) view.findViewById(R.id.tvRpm);
@@ -376,5 +365,7 @@ public class BluetoothFragment extends android.support.v4.app.Fragment {
         tvSpeed = (TextView) view.findViewById(R.id.tvSpeed);
         tvAirTemp = (TextView) view.findViewById(R.id.tvTempAirFlow);
         tvThrottle = (TextView) view.findViewById(R.id.tvThrottle);
+
+        return view;
     }
 }
