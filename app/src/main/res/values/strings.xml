@@ -23,5 +23,6 @@
     <string name="insecure_connect">Nie szyfrowane połączenie</string>
     <string name="discoverable">Widzialny</string>
     <string name="setup">Ustaw</string>
+    <string name="DriveAnalizerServiceLabel">Analizator jazdy</string>
 
 </resources>
