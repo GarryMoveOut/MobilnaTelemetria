@@ -36,6 +36,7 @@ public class UslugaBluetooth extends Service {
     private int mState;
     private ConnectedThread mConnectedThread;
     private ConnectThread mConnectThread;
+    private Context context;
 
     // Unique UUID for this application
     private static final UUID MY_UUID_SECURE =
@@ -61,6 +62,7 @@ public class UslugaBluetooth extends Service {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
+        this.context = context;
     }
 
     /**
@@ -183,10 +185,10 @@ public class UslugaBluetooth extends Service {
                                 float rpm = (float) (A * 255 + B) / 4;
                                 mHandler.obtainMessage(Constants.RPM, String.format("%.2f", rpm)).sendToTarget();
 
-                                //Intent intent = new Intent();
-                               // intent.setAction("pl.rychlinski.damian.mobilnatelemetria.pid");
-                                //intent.putExtra("RPM", rpm);
-                                //sendBroadcast(intent);
+                                Intent intent = new Intent();
+                                intent.setAction("pl.rychlinski.damian.mobilnatelemetria.pid");
+                                intent.putExtra("RPM", rpm);
+                                context.sendBroadcast(intent);
                             }
 
                             //Obciążenie silnika
