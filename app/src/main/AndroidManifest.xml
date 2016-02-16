@@ -31,6 +31,9 @@
         <service android:name=".DriveAnalizerService"
             android:label="@string/DriveAnalizerServiceLabel" />
 
+        <service android:name=".UslugaBluetooth"
+            android:label="@string/uslugaBluetooth"/>
+
     </application>
 
 </manifest>

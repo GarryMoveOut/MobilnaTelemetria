@@ -1,11 +1,14 @@
 package pl.rychlinski.damian.mobilnatelemetria;
 
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 
@@ -24,7 +27,7 @@ import java.util.UUID;
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-public class UslugaBluetooth {
+public class UslugaBluetooth extends Service {
     private static final String TAG = "BluetoothChatService";
 
     // Member fields
@@ -116,6 +119,11 @@ public class UslugaBluetooth {
         r.preSetup();
     }
 
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
     /**
      * This thread runs during a connection with a remote device.
      * It handles all incoming and outgoing transmissions.
@@ -174,7 +182,11 @@ public class UslugaBluetooth {
                                 int B = Integer.parseInt(listBytesAnsw.get(3), 16);
                                 float rpm = (float) (A * 255 + B) / 4;
                                 mHandler.obtainMessage(Constants.RPM, String.format("%.2f", rpm)).sendToTarget();
-                                //addToQueue("01 0C");
+
+                                //Intent intent = new Intent();
+                               // intent.setAction("pl.rychlinski.damian.mobilnatelemetria.pid");
+                                //intent.putExtra("RPM", rpm);
+                                //sendBroadcast(intent);
                             }
 
                             //Obciążenie silnika
@@ -248,6 +260,8 @@ public class UslugaBluetooth {
             //addToQueue("01 0C; 01 04; 01 05; 01 0D; 01 0F; 01 11");
             //fireCmd();
             preSetupON = false;
+            addToQueue("01 0C");
+            fireCmd();
         }
 
         /**

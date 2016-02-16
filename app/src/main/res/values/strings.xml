@@ -24,5 +24,6 @@
     <string name="discoverable">Widzialny</string>
     <string name="setup">Ustaw</string>
     <string name="DriveAnalizerServiceLabel">Analizator jazdy</string>
+    <string name="uslugaBluetooth">usługa Bluetooth</string>
 
 </resources>

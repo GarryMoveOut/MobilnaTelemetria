@@ -174,6 +174,7 @@ public class BluetoothFragment extends Fragment {
                     break;
                 case Constants.RPM:
                     String sRpm = (String) msg.obj;
+                    sRpm = sRpm.replace(",",".");
                     rpm = Float.valueOf(sRpm);
                     //rpmSeries.addLast(null, rpm);
                     tvRpm.setText(sRpm);
