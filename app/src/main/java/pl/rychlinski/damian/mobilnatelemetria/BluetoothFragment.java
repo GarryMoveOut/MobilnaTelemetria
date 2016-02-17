@@ -66,10 +66,6 @@ public class BluetoothFragment extends Fragment {
             activity.finish();
         }
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.drivemark");
-        getActivity().registerReceiver(receiver, filter);
-
         Intent intent = new Intent(getActivity().getApplicationContext(), DriveAnalizerService.class);
         getActivity().startService(intent);
     }
@@ -346,6 +342,7 @@ public class BluetoothFragment extends Fragment {
         if (mChatService != null) {
             mChatService.stop();
         }
+        //wyrejestrowanie filtru usługi
         getActivity().unregisterReceiver(receiver);
     }
 
@@ -363,6 +360,10 @@ public class BluetoothFragment extends Fragment {
                 //mChatService.start(); //TODO Serwer?
             //}
         }
+        //Rejestracja filtru odbierającego wiadomości od usługi analizatora jazdy
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.drivemark");
+        getActivity().registerReceiver(receiver, filter);
     }
 
     @Override
