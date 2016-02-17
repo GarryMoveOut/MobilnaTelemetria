@@ -5,7 +5,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -62,6 +65,13 @@ public class BluetoothFragment extends Fragment {
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             activity.finish();
         }
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.drivemark");
+        getActivity().registerReceiver(receiver, filter);
+
+        Intent intent = new Intent(getActivity().getApplicationContext(), DriveAnalizerService.class);
+        getActivity().startService(intent);
     }
 
     @Override
@@ -336,6 +346,7 @@ public class BluetoothFragment extends Fragment {
         if (mChatService != null) {
             mChatService.stop();
         }
+        getActivity().unregisterReceiver(receiver);
     }
 
     @Override
@@ -369,4 +380,14 @@ public class BluetoothFragment extends Fragment {
 
         return view;
     }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(action.equals("pl.rychlinski.damian.drivemark")){
+                //PID
+            }
+        }
+    };
 }
