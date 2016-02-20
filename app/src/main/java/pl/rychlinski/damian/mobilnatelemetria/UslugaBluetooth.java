@@ -208,7 +208,11 @@ public class UslugaBluetooth extends Service {
                                 int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                                 int coolantTemp = A - 40;
                                 mHandler.obtainMessage(Constants.COOLANTTEMP, Integer.toString(coolantTemp)).sendToTarget();
-                                //addToQueue("01 05");
+
+                                Intent intent = new Intent();
+                                intent.setAction("pl.rychlinski.damian.mobilnatelemetria.pid.coolanttemp");
+                                intent.putExtra("COOLANTTEMP", coolantTemp);
+                                context.sendBroadcast(intent);
                             }
 
                             //Prędkość pojazdu

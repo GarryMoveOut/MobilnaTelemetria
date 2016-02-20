@@ -27,6 +27,7 @@ public class DriveAnalizerService extends Service {
         IntentFilter filter = new IntentFilter();
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.rpm");
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.load");
+        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.coolanttemp");
         registerReceiver(receiver, filter);
     }
 
@@ -52,6 +53,13 @@ public class DriveAnalizerService extends Service {
                 float load = intent.getExtras().getFloat("LOAD");
                 float tmp = load - 1f; //TODO: Do usunięcia po skończeniu testów
             }
+
+            if(action.equals("pl.rychlinski.damian.mobilnatelemetria.pid.coolanttemp")){
+                Log.d(TAG,"Received Coolanttemp");
+                float coolanttemp = intent.getExtras().getInt("COOLANTTEMP");
+                float tmp = coolanttemp - 1f; //TODO: Do usunięcia po skończeniu testów
+            }
+
         }
     };
 }
