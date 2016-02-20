@@ -387,7 +387,7 @@ public class BluetoothFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if(action.equals("pl.rychlinski.damian.drivemark")){
-                //PID
+                //Ocena
             }
         }
     };

@@ -240,6 +240,7 @@ public class UslugaBluetooth extends Service {
                                 addToQueue(CMD_ASK_LIST.get(cmdPointer));
                                 cmdPointer++;
                                 if(cmdPointer>5) cmdPointer = 0;
+                                fireCmd();
                             }else{
                                 fireCmd();
                             }
