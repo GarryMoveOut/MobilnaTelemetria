@@ -196,7 +196,11 @@ public class UslugaBluetooth extends Service {
                                 int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                                 float load = (float) A * 100 / 255;
                                 mHandler.obtainMessage(Constants.LOAD, String.format("%.2f", load)).sendToTarget();
-                                //addToQueue("01 04");
+
+                                Intent intent = new Intent();
+                                intent.setAction("pl.rychlinski.damian.mobilnatelemetria.pid.load");
+                                intent.putExtra("LOAD", load);
+                                context.sendBroadcast(intent);
                             }
 
                             //Temperatura płynu chłodniczego
