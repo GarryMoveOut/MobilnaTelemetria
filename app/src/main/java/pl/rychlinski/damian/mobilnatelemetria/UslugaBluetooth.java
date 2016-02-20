@@ -231,7 +231,11 @@ public class UslugaBluetooth extends Service {
                                 int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                                 int airTemp = A - 40;
                                 mHandler.obtainMessage(Constants.AIRTEMP, Integer.toString(airTemp)).sendToTarget();
-                                //addToQueue("01 0F");
+
+                                Intent intent = new Intent();
+                                intent.setAction("pl.rychlinski.damian.mobilnatelemetria.pid.airtemp");
+                                intent.putExtra("AIRTEMP", airTemp);
+                                context.sendBroadcast(intent);
                             }
 
                             //Pozycja przepustnicy
