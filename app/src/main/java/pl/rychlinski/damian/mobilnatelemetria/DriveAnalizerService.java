@@ -23,7 +23,7 @@ public class DriveAnalizerService extends Service {
     @Override
     public void onCreate() {
         IntentFilter filter = new IntentFilter();
-        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid");
+        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.rpm");
         registerReceiver(receiver, filter);
     }
 
@@ -37,8 +37,8 @@ public class DriveAnalizerService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(action.equals("pl.rychlinski.damian.pid")){
-                //PID
+            if(action.equals("pl.rychlinski.damian.mobilnatelemetria.pid.rpm")){
+                float rpm = intent.getExtras().getFloat("RPM");
             }
         }
     };

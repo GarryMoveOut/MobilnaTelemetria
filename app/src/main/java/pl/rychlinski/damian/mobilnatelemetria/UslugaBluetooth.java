@@ -186,7 +186,7 @@ public class UslugaBluetooth extends Service {
                                 mHandler.obtainMessage(Constants.RPM, String.format("%.2f", rpm)).sendToTarget();
 
                                 Intent intent = new Intent();
-                                intent.setAction("pl.rychlinski.damian.mobilnatelemetria.pid");
+                                intent.setAction("pl.rychlinski.damian.mobilnatelemetria.pid.rpm");
                                 intent.putExtra("RPM", rpm);
                                 context.sendBroadcast(intent);
                             }
