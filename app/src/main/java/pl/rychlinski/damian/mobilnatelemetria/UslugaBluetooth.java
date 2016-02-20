@@ -243,7 +243,11 @@ public class UslugaBluetooth extends Service {
                                 int A = Integer.parseInt(listBytesAnsw.get(2), 16);
                                 float throttle = (float) A * 100 / 255;
                                 mHandler.obtainMessage(Constants.THROTTLE, String.format("%.2f", throttle)).sendToTarget();
-                                //addToQueue("01 11");
+
+                                Intent intent = new Intent();
+                                intent.setAction("pl.rychlinski.damian.mobilnatelemetria.pid.throttle");
+                                intent.putExtra("THROTTLE", throttle);
+                                context.sendBroadcast(intent);
                             }
                         }catch (IndexOutOfBoundsException ex){
                             Log.e(TAG, "OutOfBound", ex);

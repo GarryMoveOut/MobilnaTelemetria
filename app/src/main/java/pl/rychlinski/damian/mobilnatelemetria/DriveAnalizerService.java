@@ -30,6 +30,7 @@ public class DriveAnalizerService extends Service {
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.coolanttemp");
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.speed");
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.airtemp");
+        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.throttle");
         registerReceiver(receiver, filter);
     }
 
@@ -72,6 +73,12 @@ public class DriveAnalizerService extends Service {
                 Log.d(TAG,"Received Airspeed");
                 int airtemp = intent.getExtras().getInt("AIRTEMP");
                 float tmp = airtemp - 1f; //TODO: Do usunięcia po skończeniu testów
+            }
+
+            if(action.equals("pl.rychlinski.damian.mobilnatelemetria.pid.throttle")){
+                Log.d(TAG,"Received throttle");
+                int throttle = intent.getExtras().getInt("THROTTLE");
+                float tmp = throttle - 1f; //TODO: Do usunięcia po skończeniu testów
             }
         }
     };
