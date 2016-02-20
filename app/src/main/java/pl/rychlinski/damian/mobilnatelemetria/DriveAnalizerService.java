@@ -28,6 +28,7 @@ public class DriveAnalizerService extends Service {
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.rpm");
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.load");
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.coolanttemp");
+        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.speed");
         registerReceiver(receiver, filter);
     }
 
@@ -60,6 +61,11 @@ public class DriveAnalizerService extends Service {
                 float tmp = coolanttemp - 1f; //TODO: Do usunięcia po skończeniu testów
             }
 
+            if(action.equals("pl.rychlinski.damian.mobilnatelemetria.pid.speed")){
+                Log.d(TAG,"Received Speed");
+                float speed = intent.getExtras().getInt("SPEED");
+                float tmp = speed - 1f; //TODO: Do usunięcia po skończeniu testów
+            }
         }
     };
 }

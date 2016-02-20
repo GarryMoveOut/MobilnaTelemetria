@@ -219,7 +219,11 @@ public class UslugaBluetooth extends Service {
                             if (listBytesAnsw.get(1).equals("0D")) {
                                 int speed = Integer.parseInt(listBytesAnsw.get(2), 16);
                                 mHandler.obtainMessage(Constants.SPEED, Integer.toString(speed)).sendToTarget();
-                                //addToQueue("01 0D");
+
+                                Intent intent = new Intent();
+                                intent.setAction("pl.rychlinski.damian.mobilnatelemetria.pid.speed");
+                                intent.putExtra("SPEED", speed);
+                                context.sendBroadcast(intent);
                             }
 
                             //Temperatura powietrza zassanego
