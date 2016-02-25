@@ -5,11 +5,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.util.Log;
 
-public class DriveAnalizerService extends Service {
+public class DriveAnalizerService extends Service implements SensorEventListener {
     private static final String TAG = "DriveAnalizerService";
+
+    private SensorManager senSensorManager;
+    private Sensor senAccelerometer;
 
     private float driveMark;
 
@@ -24,6 +31,9 @@ public class DriveAnalizerService extends Service {
             gf, gt,
             lf,lt;
 
+    private float gValY, gValZ;
+    private float gforce;
+    private long lastUpdate = 0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
@@ -57,12 +67,17 @@ public class DriveAnalizerService extends Service {
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.airtemp");
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.throttle");
         registerReceiver(receiver, filter);
+
+        senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(receiver);
+        senSensorManager.unregisterListener(this);
     }
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -74,8 +89,6 @@ public class DriveAnalizerService extends Service {
         int speed;
         int airtemp;
         float throttle;
-        float gforce;
-
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -150,9 +163,9 @@ public class DriveAnalizerService extends Service {
                 }
 
                 if(gforce > w4){
-                    driveMark =+ gforce*100*gt; //kara
-                    driveMark =- 100-(gforce*100) * gf; //nagroda
+                    driveMark =+ gforce * gt; //kara
                 }else{
+                    driveMark =- gforce * gf; //nagroda
                 }
 
                 if(load > w5){
@@ -163,4 +176,30 @@ public class DriveAnalizerService extends Service {
             }
         }
     };
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        Sensor mySensor = event.sensor;
+
+        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float gForceY = event.values[1];
+            float gForceZ = event.values[2];
+
+            long curTime = System.currentTimeMillis();
+
+            if ((curTime - lastUpdate) > 100) {
+                long diffTime = (curTime - lastUpdate);
+                lastUpdate = curTime;
+
+                gValY = Math.abs(gForceY);
+                gValZ = Math.abs(gForceZ);
+                gforce = gValY + gValZ;
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }
