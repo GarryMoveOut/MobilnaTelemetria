@@ -130,48 +130,49 @@ public class DriveAnalizerService extends Service implements SensorEventListener
                 if(throttle > 0f && throttle < 100f) throttleChk = true;
             }
 
-            if(rpmChk && loadChk && coolantTempChk && speedChk && airtempChk && throttleChk){
-                //TODO wczytać gforce
-                if(speed > w0){
-                    if(rpm < w1Pl && rpm > w1Pg){
-                        if(coolanttemp < w2P){
-                            driveMark =+ (rpm/100)*strtct; //kara x2
-                        }else{
-                            driveMark =- (rpm/100)*strtcf; //kara
+            if(rpmChk && loadChk && coolantTempChk && speedChk && airtempChk && throttleChk) {
+                synchronized (this) { //TODO: Czy potrzebne?
+                    if (speed > w0) {
+                        if (rpm < w1Pl && rpm > w1Pg) {
+                            if (coolanttemp < w2P) {
+                                driveMark = +(rpm / 100) * strtct; //kara x2
+                            } else {
+                                driveMark = -(rpm / 100) * strtcf; //kara
+                            }
+                        } else {
+                            driveMark = -1 * strf; //nagroda
                         }
-                    }else{
-                        driveMark =- 1 * strf; //nagroda
-                    }
-                }else{
-                    if(rpm > w1L){
-                        if(coolanttemp < w2L){
-                            driveMark =+ (rpm/100)*sfrtct; //kara x2
-                        }else{
-                            driveMark =+ (rpm/100)*sfrtcf; //kara
+                    } else {
+                        if (rpm > w1L) {
+                            if (coolanttemp < w2L) {
+                                driveMark = +(rpm / 100) * sfrtct; //kara x2
+                            } else {
+                                driveMark = +(rpm / 100) * sfrtcf; //kara
+                            }
+                        } else {
+                            driveMark = -1 * sfrf; //nagroda
                         }
-                    }else{
-                        driveMark =- 1*sfrf; //nagroda
                     }
-                }
 
 //czesc 2
 
-                if(throttle > w3){
-                    driveMark =+ throttle * tt; //kara
-                }else{
-                    driveMark =- (100 - throttle) * tf; //nagroda
-                }
+                    if (throttle > w3) {
+                        driveMark = +throttle * tt; //kara
+                    } else {
+                        driveMark = -(100 - throttle) * tf; //nagroda
+                    }
 
-                if(gforce > w4){
-                    driveMark =+ gforce * gt; //kara
-                }else{
-                    driveMark =- gforce * gf; //nagroda
-                }
+                    if (gforce > w4) {
+                        driveMark = +gforce * gt; //kara
+                    } else {
+                        driveMark = -gforce * gf; //nagroda
+                    }
 
-                if(load > w5){
-                    //kara
-                }else{
-                    //nagroda
+                    if (load > w5) {
+                        //kara
+                    } else {
+                        //nagroda
+                    }
                 }
             }
         }
@@ -188,7 +189,6 @@ public class DriveAnalizerService extends Service implements SensorEventListener
             long curTime = System.currentTimeMillis();
 
             if ((curTime - lastUpdate) > 100) {
-                long diffTime = (curTime - lastUpdate);
                 lastUpdate = curTime;
 
                 gValY = Math.abs(gForceY);
