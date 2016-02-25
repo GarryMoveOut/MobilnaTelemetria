@@ -176,7 +176,7 @@ public class BluetoothFragment extends Fragment {
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    //TODO: Zapis do logów
+
                     break;
                 case Constants.RPM:
                     String sRpm = (String) msg.obj;
@@ -184,32 +184,32 @@ public class BluetoothFragment extends Fragment {
                     rpm = Float.valueOf(sRpm);
                     //rpmSeries.addLast(null, rpm);
                     tvRpm.setText(sRpm);
-                    //TODO: Zapis do logów
+
                     break;
                 case Constants.LOAD:
                     String load = (String) msg.obj;
                     tvLoad.setText(load);
-                    //TODO: Zapis do logów
+
                     break;
                 case Constants.COOLANTTEMP:
                     String coolantTemp = (String) msg.obj;
                     tvCoolantTemp.setText(coolantTemp);
-                    //TODO: Zapis do logów
+
                     break;
                 case Constants.SPEED:
                     String speed = (String) msg.obj;
                     tvSpeed.setText(speed);
-                    //TODO: Zapis do logów
+
                     break;
                 case Constants.AIRTEMP:
                     String airTemp = (String) msg.obj;
                     tvAirTemp.setText(airTemp);
-                    //TODO: Zapis do logów
+
                     break;
                 case Constants.THROTTLE:
                     String throttle = (String) msg.obj;
                     tvThrottle.setText(throttle);
-                    //TODO: Zapis do logów
+
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
@@ -350,16 +350,6 @@ public class BluetoothFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // Performing this check in onResume() covers the case in which BT was
-        // not enabled during onStart(), so we were paused to enable it...
-        // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
-        if (mChatService != null) {
-            // Only if the state is STATE_NONE, do we know that we haven't started already
-            //if (mChatService.getState() == UslugaBluetooth.STATE_NONE) {
-                // Start the Bluetooth chat services
-                //mChatService.start(); //TODO Serwer?
-            //}
-        }
         //Rejestracja filtru odbierającego wiadomości od usługi analizatora jazdy
         IntentFilter filter = new IntentFilter();
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.drivemark");
