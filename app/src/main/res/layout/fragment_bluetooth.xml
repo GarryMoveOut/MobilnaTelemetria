@@ -138,19 +138,27 @@
                 android:gravity="right" />
         </LinearLayout>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ustawienia wstępne"
-            android:id="@+id/btnPreSetup"
-            android:layout_column="0" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Monitoruj telemetrie"
-            android:id="@+id/btnStartTel"
-            android:layout_column="0" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ustawienia wstępne"
+                android:id="@+id/btnPreSetup"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Monitoruj telemetrie"
+                android:id="@+id/btnStartTel"
+                android:layout_column="0"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

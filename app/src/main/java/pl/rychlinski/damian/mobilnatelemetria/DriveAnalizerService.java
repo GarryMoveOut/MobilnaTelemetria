@@ -274,18 +274,12 @@ public class DriveAnalizerService extends Service implements SensorEventListener
 
         private boolean isExternalStorageReadOnly() {
             String extStorageState = Environment.getExternalStorageState();
-            if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
-                return true;
-            }
-            return false;
+            return Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState);
         }
 
         private boolean isExternalStorageAvailable() {
             String extStorageState = Environment.getExternalStorageState();
-            if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
-                return true;
-            }
-            return false;
+            return Environment.MEDIA_MOUNTED.equals(extStorageState);
         }
     }
 }
