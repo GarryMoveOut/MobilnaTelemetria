@@ -3,20 +3,30 @@ package pl.rychlinski.damian.mobilnatelemetria;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class DriveAnalizerService extends Service implements SensorEventListener {
     private static final String TAG = "DriveAnalizerService";
 
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
+    private Queue<String> buffLog;
+    private LoggerThread loggerThread;
 
     private float driveMark;
 
@@ -46,6 +56,10 @@ public class DriveAnalizerService extends Service implements SensorEventListener
         w3 = 50;
         w4 = 0.25f;
         w5 = 0; //?
+
+        buffLog = new LinkedList<>();
+        loggerThread = new LoggerThread();
+        loggerThread.start();
 
         return Service.START_STICKY;
     }
@@ -173,6 +187,18 @@ public class DriveAnalizerService extends Service implements SensorEventListener
                     } else {
                         //nagroda
                     }
+
+                    //zapisa do bufora
+                    buffLog.offer("time:" +
+                            "\t RPM:" + rpm +
+                            "\t LOAD:"+ load +
+                            "\t COOLANT:" + coolanttemp +
+                            "\t SPEED:" + speed +
+                            "\t AIRTEMP:" + airtemp +
+                            "\t THROTTLE:" + throttle +
+                            "\t Gy:"+ gValY +
+                            "\t Gz:"+ gValZ +
+                            "\t MARK:" + driveMark + "\n");
                 }
             }
         }
@@ -201,5 +227,65 @@ public class DriveAnalizerService extends Service implements SensorEventListener
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    private class LoggerThread extends Thread {
+        private String filename = "driveLog.txt";
+        private String filepath = "Logs";
+        private ContextWrapper contextWrapper;
+        private File myExternalFile;
+        private File directory;
+
+        public LoggerThread(){
+            Log.d("LoggerThread", "Starting logger");
+            contextWrapper = new ContextWrapper(getApplicationContext());
+            directory = contextWrapper.getDir(filepath, Context.MODE_PRIVATE);
+
+            if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+                Log.e("LOGGERTGREAD","Brak dostępu do karty");
+            }else {
+                myExternalFile = new File(getExternalFilesDir(filepath), filename);
+            }
+        }
+
+        @Override
+        public void run() {
+            super.run();
+
+            Log.d("LoggerThread", "RUNING");
+            while(!Thread.interrupted()){
+                if(!buffLog.isEmpty()) {
+                    try {
+                        FileOutputStream fos = new FileOutputStream(myExternalFile, true);
+                        fos.write(buffLog.poll().getBytes());
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        private boolean isExternalStorageReadOnly() {
+            String extStorageState = Environment.getExternalStorageState();
+            if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+                return true;
+            }
+            return false;
+        }
+
+        private boolean isExternalStorageAvailable() {
+            String extStorageState = Environment.getExternalStorageState();
+            if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
+                return true;
+            }
+            return false;
+        }
     }
 }
