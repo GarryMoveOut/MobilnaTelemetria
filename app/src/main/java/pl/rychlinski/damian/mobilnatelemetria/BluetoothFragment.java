@@ -66,8 +66,8 @@ public class BluetoothFragment extends Fragment {
             activity.finish();
         }
 
-        Intent intent = new Intent(getActivity().getApplicationContext(), DriveAnalizerService.class);
-        getActivity().startService(intent);
+        Log.d(TAG,"Send intent to start DriveAnalizerService");
+        getActivity().startService(new Intent(getActivity(),DriveAnalizerService.class));
     }
 
     @Override

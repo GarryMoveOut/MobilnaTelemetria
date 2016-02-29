@@ -17,6 +17,8 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -47,6 +49,7 @@ public class DriveAnalizerService extends Service implements SensorEventListener
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
+        Log.d("DriveAnalizerService", "onStartCommand");
         w0 = 5;
         w1L = 1200;
         w1Pl = 1800;
@@ -56,6 +59,20 @@ public class DriveAnalizerService extends Service implements SensorEventListener
         w3 = 50;
         w4 = 0.25f;
         w5 = 0; //?
+
+        sfrf = 10;
+        sfrtcf = 1;
+        sfrtct = 2;
+        strf = 20;
+        strtcf = 1;
+        strtct = 2;
+        tf = 1;
+        tt = 2;
+        gf = 2;
+        gt = 1;
+        lf = 0; //TODO: dobrać współczynnik
+        lt = 0;
+
 
         buffLog = new LinkedList<>();
         loggerThread = new LoggerThread();
@@ -71,7 +88,8 @@ public class DriveAnalizerService extends Service implements SensorEventListener
 
     @Override
     public void onCreate() {
-        driveMark = 0;
+        Log.d("DriveAnalizerService", "onCreate");
+        driveMark = 0f;
 
         IntentFilter filter = new IntentFilter();
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.rpm");
@@ -90,6 +108,7 @@ public class DriveAnalizerService extends Service implements SensorEventListener
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("DriveAnalizerService", "onDestroy");
         unregisterReceiver(receiver);
         senSensorManager.unregisterListener(this);
     }
@@ -149,47 +168,50 @@ public class DriveAnalizerService extends Service implements SensorEventListener
                     if (speed > w0) {
                         if (rpm < w1Pl && rpm > w1Pg) {
                             if (coolanttemp < w2P) {
-                                driveMark = +(rpm / 100) * strtct; //kara x2
+                                driveMark =+ (rpm / 100) * strtct; //kara x2
                             } else {
-                                driveMark = -(rpm / 100) * strtcf; //kara
+                                driveMark =-(rpm / 100) * strtcf; //kara
                             }
                         } else {
-                            driveMark = -1 * strf; //nagroda
+                            driveMark =- 1 * strf; //nagroda
                         }
                     } else {
                         if (rpm > w1L) {
                             if (coolanttemp < w2L) {
-                                driveMark = +(rpm / 100) * sfrtct; //kara x2
+                                driveMark =+ (rpm / 100) * sfrtct; //kara x2
                             } else {
-                                driveMark = +(rpm / 100) * sfrtcf; //kara
+                                driveMark =+ (rpm / 100) * sfrtcf; //kara
                             }
                         } else {
-                            driveMark = -1 * sfrf; //nagroda
+                            driveMark =- 1 * sfrf; //nagroda
                         }
                     }
 
 //czesc 2
 
                     if (throttle > w3) {
-                        driveMark = +throttle * tt; //kara
+                        driveMark =+ throttle * tt; //kara
                     } else {
-                        driveMark = -(100 - throttle) * tf; //nagroda
+                        driveMark =- (100 - throttle) * tf; //nagroda
                     }
 
                     if (gforce > w4) {
-                        driveMark = +gforce * gt; //kara
+                        driveMark =+ gforce * gt; //kara
                     } else {
-                        driveMark = -gforce * gf; //nagroda
+                        driveMark =- gforce * gf; //nagroda
                     }
 
                     if (load > w5) {
-                        //kara
+                        //kara //TODO: dodać ocenę obciążenia silnika
                     } else {
                         //nagroda
                     }
 
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+                    String currentDateandTime = sdf.format(new Date());
+
                     //zapisa do bufora
-                    buffLog.offer("time:" +
+                    buffLog.offer("TIME:" + currentDateandTime +
                             "\t RPM:" + rpm +
                             "\t LOAD:"+ load +
                             "\t COOLANT:" + coolanttemp +
@@ -199,7 +221,14 @@ public class DriveAnalizerService extends Service implements SensorEventListener
                             "\t Gy:"+ gValY +
                             "\t Gz:"+ gValZ +
                             "\t MARK:" + driveMark + "\n");
+                    Log.d("DriverAnalizerService", "Data has been buffered");
                 }
+                rpmChk = false;
+                loadChk = false;
+                coolantTempChk = false;
+                speedChk = false;
+                airtempChk = false;
+                throttleChk = false;
             }
         }
     };
@@ -258,6 +287,7 @@ public class DriveAnalizerService extends Service implements SensorEventListener
                     try {
                         FileOutputStream fos = new FileOutputStream(myExternalFile, true);
                         fos.write(buffLog.poll().getBytes());
+                        Log.d("LoggerThread", "Buffer has been saved");
                         fos.close();
                     } catch (IOException e) {
                         e.printStackTrace();
