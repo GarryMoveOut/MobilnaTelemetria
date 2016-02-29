@@ -207,6 +207,12 @@ public class DriveAnalizerService extends Service implements SensorEventListener
                         //nagroda
                     }
 
+
+                    Intent driveMarkIntent = new Intent();
+                    intent.setAction("pl.rychlinski.damian.mobilnatelemetria.driveanalizerservice.drivemark");
+                    intent.putExtra("MARK", driveMark);
+                    context.sendBroadcast(intent);
+
                     SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
                     String currentDateandTime = sdf.format(new Date());
 

@@ -36,21 +36,9 @@ public class BluetoothFragment extends Fragment {
     private StringBuffer mOutStringBuffer;
     private String mConnectedDeviceName = null;
 
-    private float rpm;
-    private float load;
-    private int coolant;
-    private int speed;
-    private int airTemp;
-    private float throttle;
-
     private Button btnPreSetup;
     private Button btnStartTelemetry;
-    private TextView tvRpm;
-    private TextView tvLoad;
-    private TextView tvCoolantTemp;
-    private TextView tvSpeed;
-    private TextView tvAirTemp;
-    private TextView tvThrottle;
+    private TextView tvRpm, tvLoad, tvCoolantTemp, tvSpeed, tvAirTemp, tvThrottle, tvOcena;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,8 +54,12 @@ public class BluetoothFragment extends Fragment {
             activity.finish();
         }
 
-        Log.d(TAG,"Send intent to start DriveAnalizerService");
-        getActivity().startService(new Intent(getActivity(),DriveAnalizerService.class));
+        Log.d(TAG, "Send intent to start DriveAnalizerService");
+        getActivity().startService(new Intent(getActivity(), DriveAnalizerService.class));
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.driveanalizerservice.drivemark");
+        getActivity().registerReceiver(receiver, filter);
     }
 
     @Override
@@ -87,6 +79,7 @@ public class BluetoothFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        getActivity().unregisterReceiver(receiver);
     }
 
     /**
@@ -181,8 +174,6 @@ public class BluetoothFragment extends Fragment {
                 case Constants.RPM:
                     String sRpm = (String) msg.obj;
                     sRpm = sRpm.replace(",",".");
-                    rpm = Float.valueOf(sRpm);
-                    //rpmSeries.addLast(null, rpm);
                     tvRpm.setText(sRpm);
 
                     break;
@@ -352,7 +343,7 @@ public class BluetoothFragment extends Fragment {
 
         //Rejestracja filtru odbierającego wiadomości od usługi analizatora jazdy
         IntentFilter filter = new IntentFilter();
-        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.drivemark");
+        filter.addAction("pl.rychlinski.damian.mobilnatelemetria.driveanalizerservice.drivemark");
         getActivity().registerReceiver(receiver, filter);
     }
 
@@ -368,6 +359,7 @@ public class BluetoothFragment extends Fragment {
         tvSpeed = (TextView) view.findViewById(R.id.tvSpeed);
         tvAirTemp = (TextView) view.findViewById(R.id.tvTempAirFlow);
         tvThrottle = (TextView) view.findViewById(R.id.tvThrottle);
+        tvOcena = (TextView) view.findViewById(R.id.tvOcena);
 
         return view;
     }
@@ -376,8 +368,10 @@ public class BluetoothFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(action.equals("pl.rychlinski.damian.drivemark")){
-                //Ocena
+            if(action.equals("pl.rychlinski.damian.mobilnatelemetria.driveanalizerservice.drivemark")){
+                float ocena = intent.getExtras().getFloat("MARK");
+                String sOcena = String.format("%.02f", ocena);
+                tvOcena.setText(sOcena);
             }
         }
     };
