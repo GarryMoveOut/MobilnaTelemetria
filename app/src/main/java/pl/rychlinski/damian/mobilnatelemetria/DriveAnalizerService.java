@@ -109,7 +109,9 @@ public class DriveAnalizerService extends Service implements SensorEventListener
     public void onDestroy() {
         super.onDestroy();
         Log.d("DriveAnalizerService", "onDestroy");
-        unregisterReceiver(receiver);
+        if(receiver != null) {
+            unregisterReceiver(receiver);
+        }
         senSensorManager.unregisterListener(this);
     }
 
