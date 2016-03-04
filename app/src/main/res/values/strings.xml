@@ -20,10 +20,12 @@
     <string name="select_device">Wybierz urządzenie</string>
     <string name="none_found">Nie znaleziono</string>
     <string name="secure_connect">Bezpieczne połączenie</string>
-    <string name="insecure_connect">Nie szyfrowane połączenie</string>
+    <string name="insecure_connect">Połącz</string>
     <string name="discoverable">Widzialny</string>
     <string name="setup">Ustaw</string>
     <string name="DriveAnalizerServiceLabel">Analizator jazdy</string>
     <string name="uslugaBluetooth">usługa Bluetooth</string>
+    <string name="preSetup">Ust. wstępne</string>
+    <string name="strTel">Rozpocznij</string>
 
 </resources>

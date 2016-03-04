@@ -26,4 +26,14 @@
         android:showAsAction="never"
         android:title="@string/discoverable"/>
 
+    <item
+        android:id="@+id/preSetup"
+        android:showAsAction="never"
+        android:title="@string/preSetup"/>
+
+    <item
+        android:id="@+id/startTel"
+        android:showAsAction="never"
+        android:title="@string/strTel"/>
+
 </menu>

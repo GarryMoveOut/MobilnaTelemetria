@@ -18,8 +18,8 @@ public class MainActivity extends Activity {
 
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            BluetoothFragment fragment = new BluetoothFragment();
-            transaction.replace(R.id.fragment_bluetooth, fragment);
+            BluetoothFragmentv2 fragment = new BluetoothFragmentv2();
+            transaction.replace(R.id.fragment, fragment);
             transaction.commit();
         }
     }
