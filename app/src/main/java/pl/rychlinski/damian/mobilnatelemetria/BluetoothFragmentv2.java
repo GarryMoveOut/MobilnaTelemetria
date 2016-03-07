@@ -442,7 +442,7 @@ public class BluetoothFragmentv2 extends Fragment {
         YAxis leftAxis = cThrottle.getAxisLeft();
         //leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.WHITE);
-        leftAxis.setAxisMaxValue(150f);
+        leftAxis.setAxisMaxValue(100f);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setDrawGridLines(true);
 
@@ -510,7 +510,7 @@ public class BluetoothFragmentv2 extends Fragment {
         YAxis leftAxis = cLoad.getAxisLeft();
         //leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.WHITE);
-        leftAxis.setAxisMaxValue(150f);
+        leftAxis.setAxisMaxValue(100f);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setDrawGridLines(true);
 
@@ -647,7 +647,7 @@ public class BluetoothFragmentv2 extends Fragment {
         //leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.WHITE);
         leftAxis.setAxisMaxValue(8000f);
-        leftAxis.setAxisMinValue(100f);
+        leftAxis.setAxisMinValue(0f);
         leftAxis.setDrawGridLines(true);
 
         YAxis rightAxis = cRPM.getAxisRight();
