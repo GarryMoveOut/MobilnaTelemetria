@@ -401,7 +401,7 @@ public class BluetoothFragmentv2 extends Fragment {
     private void setupLineChartThrottle() {
         // no description text
         cThrottle.setDescription("");
-        cThrottle.setNoDataTextDescription("You need to provide data for the chart.");
+        cThrottle.setNoDataTextDescription("Brak danych");
 
         // enable touch gestures
         cThrottle.setTouchEnabled(true);
@@ -415,10 +415,10 @@ public class BluetoothFragmentv2 extends Fragment {
         cThrottle.setPinchZoom(true);
 
         // set an alternative background color
-        cThrottle.setBackgroundColor(Color.LTGRAY);
+        cThrottle.setBackgroundColor(Color.TRANSPARENT);
 
         throttleData = new LineData();
-        throttleData.setValueTextColor(Color.WHITE);
+        throttleData.setValueTextColor(Color.BLACK);
 
         // add empty data
         cThrottle.setData(throttleData);
@@ -432,11 +432,11 @@ public class BluetoothFragmentv2 extends Fragment {
         // l.setPosition(LegendPosition.LEFT_OF_CHART);
         l.setForm(Legend.LegendForm.LINE);
         //l.setTypeface(tf);
-        l.setTextColor(Color.WHITE);
+        l.setTextColor(Color.BLACK);
 
         XAxis xl = cThrottle.getXAxis();
         //xl.setTypeface(tf);
-        xl.setTextColor(Color.WHITE);
+        xl.setTextColor(Color.BLACK);
         xl.setDrawGridLines(false);
         xl.setAvoidFirstLastClipping(true);
         xl.setSpaceBetweenLabels(5);
@@ -444,7 +444,7 @@ public class BluetoothFragmentv2 extends Fragment {
 
         YAxis leftAxis = cThrottle.getAxisLeft();
         //leftAxis.setTypeface(tf);
-        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setTextColor(Color.BLACK);
         leftAxis.setAxisMaxValue(100f);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setDrawGridLines(true);
@@ -454,10 +454,9 @@ public class BluetoothFragmentv2 extends Fragment {
 
         throttleSet = new LineDataSet(null, "Przepustnica [%]");
         throttleSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        throttleSet.setColor(ColorTemplate.getHoloBlue());
-        throttleSet.setCircleColor(Color.WHITE);
+        throttleSet.setColor(Color.GREEN);
         throttleSet.setLineWidth(2f);
-        throttleSet.setCircleRadius(4f);
+        throttleSet.setDrawCircles(false);
         throttleSet.setFillAlpha(65);
         throttleSet.setFillColor(ColorTemplate.getHoloBlue());
         throttleSet.setHighLightColor(Color.rgb(244, 117, 117));
@@ -485,10 +484,10 @@ public class BluetoothFragmentv2 extends Fragment {
         cLoad.setPinchZoom(true);
 
         // set an alternative background color
-        cLoad.setBackgroundColor(Color.LTGRAY);
+        cLoad.setBackgroundColor(Color.TRANSPARENT);
 
         loadData = new LineData();
-        loadData.setValueTextColor(Color.WHITE);
+        loadData.setValueTextColor(Color.BLACK);
 
         // add empty data
         cLoad.setData(loadData);
@@ -502,11 +501,11 @@ public class BluetoothFragmentv2 extends Fragment {
         // l.setPosition(LegendPosition.LEFT_OF_CHART);
         l.setForm(Legend.LegendForm.LINE);
         //l.setTypeface(tf);
-        l.setTextColor(Color.WHITE);
+        l.setTextColor(Color.BLACK);
 
         XAxis xl = cLoad.getXAxis();
         //xl.setTypeface(tf);
-        xl.setTextColor(Color.WHITE);
+        xl.setTextColor(Color.BLACK);
         xl.setDrawGridLines(false);
         xl.setAvoidFirstLastClipping(true);
         xl.setSpaceBetweenLabels(5);
@@ -514,7 +513,7 @@ public class BluetoothFragmentv2 extends Fragment {
 
         YAxis leftAxis = cLoad.getAxisLeft();
         //leftAxis.setTypeface(tf);
-        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setTextColor(Color.BLACK);
         leftAxis.setAxisMaxValue(100f);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setDrawGridLines(true);
@@ -524,14 +523,13 @@ public class BluetoothFragmentv2 extends Fragment {
 
         loadSet = new LineDataSet(null, "Obciążenie [%]");
         loadSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        loadSet.setColor(ColorTemplate.getHoloBlue());
-        loadSet.setCircleColor(Color.WHITE);
+        loadSet.setColor(Color.YELLOW);
+        loadSet.setDrawCircles(false);
         loadSet.setLineWidth(2f);
-        loadSet.setCircleRadius(4f);
         loadSet.setFillAlpha(65);
         loadSet.setFillColor(ColorTemplate.getHoloBlue());
         loadSet.setHighLightColor(Color.rgb(244, 117, 117));
-        loadSet.setValueTextColor(Color.WHITE);
+        loadSet.setValueTextColor(Color.BLACK);
         loadSet.setValueTextSize(9f);
         loadSet.setDrawValues(false);
 
@@ -555,10 +553,10 @@ public class BluetoothFragmentv2 extends Fragment {
         cSpeed.setPinchZoom(true);
 
         // set an alternative background color
-        cSpeed.setBackgroundColor(Color.LTGRAY);
+        cSpeed.setBackgroundColor(Color.TRANSPARENT);
 
         speedData = new LineData();
-        speedData.setValueTextColor(Color.WHITE);
+        speedData.setValueTextColor(Color.BLACK);
 
         // add empty data
         cSpeed.setData(speedData);
@@ -572,11 +570,11 @@ public class BluetoothFragmentv2 extends Fragment {
         // l.setPosition(LegendPosition.LEFT_OF_CHART);
         l.setForm(Legend.LegendForm.LINE);
         //l.setTypeface(tf);
-        l.setTextColor(Color.WHITE);
+        l.setTextColor(Color.BLACK);
 
         XAxis xl = cSpeed.getXAxis();
         //xl.setTypeface(tf);
-        xl.setTextColor(Color.WHITE);
+        xl.setTextColor(Color.BLACK);
         xl.setDrawGridLines(false);
         xl.setAvoidFirstLastClipping(true);
         xl.setSpaceBetweenLabels(5);
@@ -584,7 +582,7 @@ public class BluetoothFragmentv2 extends Fragment {
 
         YAxis leftAxis = cSpeed.getAxisLeft();
         //leftAxis.setTypeface(tf);
-        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setTextColor(Color.BLACK);
         leftAxis.setAxisMaxValue(150f);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setDrawGridLines(true);
@@ -594,14 +592,13 @@ public class BluetoothFragmentv2 extends Fragment {
 
         speedSet = new LineDataSet(null, "km/h");
         speedSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        speedSet.setColor(ColorTemplate.getHoloBlue());
-        speedSet.setCircleColor(Color.WHITE);
+        speedSet.setColor(Color.DKGRAY);
+        speedSet.setDrawCircles(false);
         speedSet.setLineWidth(2f);
-        speedSet.setCircleRadius(4f);
         speedSet.setFillAlpha(65);
         speedSet.setFillColor(ColorTemplate.getHoloBlue());
         speedSet.setHighLightColor(Color.rgb(244, 117, 117));
-        speedSet.setValueTextColor(Color.WHITE);
+        speedSet.setValueTextColor(Color.BLACK);
         speedSet.setValueTextSize(9f);
         speedSet.setDrawValues(false);
 
@@ -625,10 +622,10 @@ public class BluetoothFragmentv2 extends Fragment {
         cRPM.setPinchZoom(true);
 
         // set an alternative background color
-        cRPM.setBackgroundColor(Color.LTGRAY);
+        cRPM.setBackgroundColor(Color.TRANSPARENT);
 
         RPMdata = new LineData();
-        RPMdata.setValueTextColor(Color.WHITE);
+        RPMdata.setValueTextColor(Color.BLACK);
 
         // add empty data
         cRPM.setData(RPMdata);
@@ -642,11 +639,11 @@ public class BluetoothFragmentv2 extends Fragment {
         // l.setPosition(LegendPosition.LEFT_OF_CHART);
         l.setForm(Legend.LegendForm.LINE);
         //l.setTypeface(tf);
-        l.setTextColor(Color.WHITE);
+        l.setTextColor(Color.BLACK);
 
         XAxis xl = cRPM.getXAxis();
         //xl.setTypeface(tf);
-        xl.setTextColor(Color.WHITE);
+        xl.setTextColor(Color.BLACK);
         xl.setDrawGridLines(false);
         xl.setAvoidFirstLastClipping(true);
         xl.setSpaceBetweenLabels(5);
@@ -654,7 +651,7 @@ public class BluetoothFragmentv2 extends Fragment {
 
         YAxis leftAxis = cRPM.getAxisLeft();
         //leftAxis.setTypeface(tf);
-        leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setTextColor(Color.BLACK);
         leftAxis.setAxisMaxValue(8000f);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setDrawGridLines(true);
@@ -665,13 +662,12 @@ public class BluetoothFragmentv2 extends Fragment {
         rpmSet = new LineDataSet(null, "Obroty/min");
         rpmSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         rpmSet.setColor(ColorTemplate.getHoloBlue());
-        rpmSet.setCircleColor(Color.WHITE);
+        rpmSet.setDrawCircles(false);
         rpmSet.setLineWidth(2f);
-        rpmSet.setCircleRadius(4f);
         rpmSet.setFillAlpha(65);
         rpmSet.setFillColor(ColorTemplate.getHoloBlue());
         rpmSet.setHighLightColor(Color.rgb(244, 117, 117));
-        rpmSet.setValueTextColor(Color.WHITE);
+        rpmSet.setValueTextColor(Color.BLACK);
         rpmSet.setValueTextSize(9f);
         rpmSet.setDrawValues(false);
 
