@@ -211,10 +211,11 @@ public class BluetoothFragmentv2 extends Fragment {
 
                     break;
                 case Constants.LOAD:
-                    int load = (int) msg.obj;
-
+                    String load = (String) msg.obj;
+                    load = load.replace(",",".");
+                    float fLoad = Float.valueOf(load);
                     loadData.addXValue(currentDateandTime);
-                    loadData.addEntry(new Entry(load, loadSet.getEntryCount()), 0);
+                    loadData.addEntry(new Entry(fLoad, loadSet.getEntryCount()), 0);
 
                     // let the chart know it's data has changed
                     cLoad.notifyDataSetChanged();
@@ -237,10 +238,11 @@ public class BluetoothFragmentv2 extends Fragment {
 
                     break;
                 case Constants.SPEED:
-                    int speed = (int) msg.obj;
+                    String speed = (String) msg.obj;
+                    int iSpeed = Integer.valueOf(speed);
 
                     speedData.addXValue(currentDateandTime);
-                    speedData.addEntry(new Entry(speed, speedSet.getEntryCount()), 0);
+                    speedData.addEntry(new Entry(iSpeed, speedSet.getEntryCount()), 0);
 
                     // let the chart know it's data has changed
                     cSpeed.notifyDataSetChanged();
@@ -263,10 +265,11 @@ public class BluetoothFragmentv2 extends Fragment {
 
                     break;
                 case Constants.THROTTLE:
-                    int throttle = (int) msg.obj;
-
+                    String throttle = (String) msg.obj;
+                    throttle = throttle.replace(",",".");
+                    float fThrottle = Float.valueOf(throttle);
                     throttleData.addXValue(currentDateandTime);
-                    throttleData.addEntry(new Entry(throttle, throttleSet.getEntryCount()), 0);
+                    throttleData.addEntry(new Entry(fThrottle, throttleSet.getEntryCount()), 0);
 
                     // let the chart know it's data has changed
                     cThrottle.notifyDataSetChanged();
