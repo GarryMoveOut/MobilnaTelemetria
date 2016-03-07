@@ -464,6 +464,8 @@ public class BluetoothFragmentv2 extends Fragment {
         throttleSet.setValueTextColor(Color.WHITE);
         throttleSet.setValueTextSize(9f);
         throttleSet.setDrawValues(false);
+
+        throttleData.addDataSet(throttleSet);
     }
 
     private void setupLineChartLoad() {
@@ -532,6 +534,8 @@ public class BluetoothFragmentv2 extends Fragment {
         loadSet.setValueTextColor(Color.WHITE);
         loadSet.setValueTextSize(9f);
         loadSet.setDrawValues(false);
+
+        loadData.addDataSet(loadSet);
     }
 
     private void setupLineChartSpeed() {
@@ -600,6 +604,8 @@ public class BluetoothFragmentv2 extends Fragment {
         speedSet.setValueTextColor(Color.WHITE);
         speedSet.setValueTextSize(9f);
         speedSet.setDrawValues(false);
+
+        speedData.addDataSet(speedSet);
     }
 
     private void setupLineChartRpm(){
@@ -668,6 +674,8 @@ public class BluetoothFragmentv2 extends Fragment {
         rpmSet.setValueTextColor(Color.WHITE);
         rpmSet.setValueTextSize(9f);
         rpmSet.setDrawValues(false);
+
+        RPMdata.addDataSet(rpmSet);
     }
 
     @Override
