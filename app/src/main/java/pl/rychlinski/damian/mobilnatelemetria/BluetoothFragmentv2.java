@@ -3,10 +3,12 @@ package pl.rychlinski.damian.mobilnatelemetria;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -22,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +77,12 @@ public class BluetoothFragmentv2 extends Fragment {
     private LineData throttleData;
     private LineDataSet throttleSet;
 
+    private float sfrf, sfrtcf, sfrtct,
+            strf, strtcf, strtct,
+            tf, tt,
+            gf, gt,
+            lf,lt;
+
     public BluetoothFragmentv2() {
         // Required empty public constructor
     }
@@ -92,8 +101,35 @@ public class BluetoothFragmentv2 extends Fragment {
             activity.finish();
         }
 
+        sfrf = 10f;
+        sfrtcf = 1f;
+        sfrtct = 2f;
+        strf = 20f;
+        strtcf = 1f;
+        strtct = 2f;
+        tf = 1f;
+        tt = 2f;
+        gf = 2f;
+        gt = 1f;
+        lf = 0f; //TODO: dobrać współczynnik
+        lt = 0f;
+
         Log.d(TAG, "Wysłanie intencji do DriveAnalizerService");
-        getActivity().startService(new Intent(getActivity(), DriveAnalizerService.class));
+        Intent intent = new Intent(getActivity(), DriveAnalizerService.class);
+        intent.putExtra("sfrf",sfrf);
+        intent.putExtra("sfrtcf", sfrtcf);
+        intent.putExtra("sfrtct",sfrtct);
+        intent.putExtra("strf",strf);
+        intent.putExtra("strtcf",strtcf);
+        intent.putExtra("strtct",strtct);
+        intent.putExtra("tf",tf);
+        intent.putExtra("tt",tt);
+        intent.putExtra("gf",gf);
+        intent.putExtra("gt",gt);
+        intent.putExtra("lf",lf);
+        intent.putExtra("lt",lt);
+
+        getActivity().startService(intent);
 
         IntentFilter filter = new IntentFilter();
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.driveanalizerservice.drivemark");
@@ -169,7 +205,6 @@ public class BluetoothFragmentv2 extends Fragment {
                         case UslugaBluetooth.STATE_CONNECTING:
                             setStatus(R.string.title_connecting);
                             break;
-                        case UslugaBluetooth.STATE_LISTEN:
                         case UslugaBluetooth.STATE_NONE:
                             setStatus(R.string.title_not_connected);
                             break;
@@ -704,6 +739,78 @@ public class BluetoothFragmentv2 extends Fragment {
                 if(view != null){
                     mChatService.beginTelemetry();
                 }
+            }
+            case R.id.marksWeight:{
+                LayoutInflater li = LayoutInflater.from(getActivity());
+                View promptsView = li.inflate(R.layout.marks_dialog, null);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        getActivity());
+
+                alertDialogBuilder.setView(promptsView);
+
+                final EditText etSfrf = (EditText) promptsView.findViewById(R.id.etSfrf);
+                final EditText etSfrtcf = (EditText) promptsView.findViewById(R.id.etSfrtcf);
+                final EditText etSfrtct = (EditText) promptsView.findViewById(R.id.etSfrtct);
+                final EditText etStrf = (EditText) promptsView.findViewById(R.id.etStrf);
+                final EditText etStrtcf = (EditText) promptsView.findViewById(R.id.etStrtcf);
+                final EditText etStrtct = (EditText) promptsView.findViewById(R.id.etStrtct);
+                final EditText etTt = (EditText) promptsView.findViewById(R.id.ett);
+                final EditText etTf = (EditText) promptsView.findViewById(R.id.etTf);
+                final EditText etGf = (EditText) promptsView.findViewById(R.id.etGf);
+                final EditText etGt = (EditText) promptsView.findViewById(R.id.etGt);
+                final EditText etLf = (EditText) promptsView.findViewById(R.id.etlf);
+                final EditText etLt = (EditText) promptsView.findViewById(R.id.etlt);
+
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        //Zatwierdzenie zmiany
+                                        getActivity().stopService(new Intent(getActivity(), DriveAnalizerService.class));
+
+                                        sfrf = Float.valueOf(etSfrf.getText().toString());
+                                        sfrtcf = Float.valueOf(etSfrtcf.getText().toString());
+                                        sfrtct = Float.valueOf(etSfrtct.getText().toString());
+                                        strf = Float.valueOf(etStrf.getText().toString());
+                                        strtcf = Float.valueOf(etStrtcf.getText().toString());
+                                        strtct = Float.valueOf(etStrtct.getText().toString());
+                                        tt = Float.valueOf(etTt.getText().toString());
+                                        tf = Float.valueOf(etTf.getText().toString());
+                                        gf = Float.valueOf(etGf.getText().toString());
+                                        gt = Float.valueOf(etGt.getText().toString());
+                                        lf = Float.valueOf(etLf.getText().toString());
+                                        lt = Float.valueOf(etLt.getText().toString());
+
+                                        Intent intent = new Intent(getActivity(), DriveAnalizerService.class);
+                                        intent.putExtra("sfrf",sfrf);
+                                        intent.putExtra("sfrtcf", sfrtcf);
+                                        intent.putExtra("sfrtct",sfrtct);
+                                        intent.putExtra("strf",strf);
+                                        intent.putExtra("strtcf",strtcf);
+                                        intent.putExtra("strtct",strtct);
+                                        intent.putExtra("tf",tf);
+                                        intent.putExtra("tt",tt);
+                                        intent.putExtra("gf",gf);
+                                        intent.putExtra("gt",gt);
+                                        intent.putExtra("lf",lf);
+                                        intent.putExtra("lt",lt);
+
+                                        getActivity().startService(intent);
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
             }
         }
         return false;

@@ -60,18 +60,18 @@ public class DriveAnalizerService extends Service implements SensorEventListener
         w4 = 0.25f;
         w5 = 0; //?
 
-        sfrf = 10;
-        sfrtcf = 1;
-        sfrtct = 2;
-        strf = 20;
-        strtcf = 1;
-        strtct = 2;
-        tf = 1;
-        tt = 2;
-        gf = 2;
-        gt = 1;
-        lf = 0; //TODO: dobrać współczynnik
-        lt = 0;
+        sfrf = intent.getFloatExtra("sfrf", 10f);
+        sfrtcf = intent.getFloatExtra("sfrtcf",1);
+        sfrtct = intent.getFloatExtra("sfrtct",2f);
+        strf = intent.getFloatExtra("strf",20f);
+        strtcf = intent.getFloatExtra("strtcf", 1f);
+        strtct = intent.getFloatExtra("strtct",2f);
+        tf = intent.getFloatExtra("tf",1f);
+        tt = intent.getFloatExtra("tt",2f);
+        gf = intent.getFloatExtra("gf",2f);
+        gt = intent.getFloatExtra("gt",2f);
+        lf = intent.getFloatExtra("lf",0f); //TODO: dobrać współczynnik
+        lt = intent.getFloatExtra("lt",0f);
 
 
         buffLog = new LinkedList<>();

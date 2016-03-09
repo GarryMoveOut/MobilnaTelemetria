@@ -27,5 +27,6 @@
     <string name="uslugaBluetooth">usługa Bluetooth</string>
     <string name="preSetup">Ust. wstępne</string>
     <string name="strTel">Rozpocznij</string>
+    <string name="marksWeight">Wagi ocen</string>
 
 </resources>
