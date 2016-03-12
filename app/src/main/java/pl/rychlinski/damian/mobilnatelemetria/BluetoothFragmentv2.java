@@ -687,7 +687,7 @@ public class BluetoothFragmentv2 extends Fragment {
         YAxis leftAxis = cRPM.getAxisLeft();
         //leftAxis.setTypeface(tf);
         leftAxis.setTextColor(Color.BLACK);
-        leftAxis.setAxisMaxValue(8000f);
+        leftAxis.setAxisMaxValue(5000f);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setDrawGridLines(true);
 
@@ -733,12 +733,14 @@ public class BluetoothFragmentv2 extends Fragment {
                 if (null != view) {
                     mChatService.preSetupELM();
                 }
+                return true;
             }
             case R.id.startTel:{
                 View view = getView();
                 if(view != null){
                     mChatService.beginTelemetry();
                 }
+                return true;
             }
             case R.id.marksWeight:{
                 LayoutInflater li = LayoutInflater.from(getActivity());
@@ -811,6 +813,7 @@ public class BluetoothFragmentv2 extends Fragment {
 
                 // show it
                 alertDialog.show();
+                return true;
             }
         }
         return false;

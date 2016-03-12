@@ -219,16 +219,16 @@ public class DriveAnalizerService extends Service implements SensorEventListener
                     String currentDateandTime = sdf.format(new Date());
 
                     //zapisa do bufora
-                    buffLog.offer("TIME:" + currentDateandTime +
-                            "\t RPM:" + rpm +
-                            "\t LOAD:"+ load +
-                            "\t COOLANT:" + coolanttemp +
-                            "\t SPEED:" + speed +
-                            "\t AIRTEMP:" + airtemp +
-                            "\t THROTTLE:" + throttle +
-                            "\t Gy:"+ gValY +
-                            "\t Gz:"+ gValZ +
-                            "\t MARK:" + driveMark + "\n");
+                    buffLog.offer("TIME: " + currentDateandTime +
+                            " RPM: " + rpm +
+                            " LOAD: "+ load +
+                            " COOLANT: " + coolanttemp +
+                            " SPEED: " + speed +
+                            " AIRTEMP: " + airtemp +
+                            " THROTTLE: " + throttle +
+                            " Gy: "+ gValY +
+                            " Gz: "+ gValZ +
+                            " MARK: " + driveMark + "\n");
                     Log.d("DriverAnalizerService", "Data has been buffered");
                 }
                 rpmChk = false;
