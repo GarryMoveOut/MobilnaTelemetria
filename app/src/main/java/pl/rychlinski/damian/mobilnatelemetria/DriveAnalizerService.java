@@ -30,7 +30,7 @@ public class DriveAnalizerService extends Service implements SensorEventListener
     private Queue<String> buffLog;
     private LoggerThread loggerThread;
 
-    private float driveMark;
+    private int driveMark;
 
     //progi warunków
     int w0, w1L, w1Pl, w1Pg, w2L, w2P, w3, w5;
@@ -50,15 +50,15 @@ public class DriveAnalizerService extends Service implements SensorEventListener
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         Log.d("DriveAnalizerService", "onStartCommand");
-        w0 = 5;
-        w1L = 1200;
-        w1Pl = 1800;
-        w1Pg = 3500;
+        w0=5;
+        w1L=1100;
+        w1Pl = 1200;
+        w1Pg = 2600;
         w2L = 80;
         w2P = 80;
         w3 = 50;
-        w4 = 0.25f;
-        w5 = 0; //?
+        w5 = 50;
+        w4 = 1f;
 
         sfrf = intent.getFloatExtra("sfrf", 10f);
         sfrtcf = intent.getFloatExtra("sfrtcf",1);
@@ -69,9 +69,9 @@ public class DriveAnalizerService extends Service implements SensorEventListener
         tf = intent.getFloatExtra("tf",1f);
         tt = intent.getFloatExtra("tt",2f);
         gf = intent.getFloatExtra("gf",2f);
-        gt = intent.getFloatExtra("gt",2f);
-        lf = intent.getFloatExtra("lf",0f); //TODO: dobrać współczynnik
-        lt = intent.getFloatExtra("lt",0f);
+        gt = intent.getFloatExtra("gt",5f);
+        lf = intent.getFloatExtra("lf",1f);
+        lt = intent.getFloatExtra("lt",1f);
 
 
         buffLog = new LinkedList<>();
@@ -89,7 +89,7 @@ public class DriveAnalizerService extends Service implements SensorEventListener
     @Override
     public void onCreate() {
         Log.d("DriveAnalizerService", "onCreate");
-        driveMark = 0f;
+        driveMark = 0;
 
         IntentFilter filter = new IntentFilter();
         filter.addAction("pl.rychlinski.damian.mobilnatelemetria.pid.rpm");
@@ -168,45 +168,50 @@ public class DriveAnalizerService extends Service implements SensorEventListener
             if(rpmChk && loadChk && coolantTempChk && speedChk && airtempChk && throttleChk) {
                 synchronized (this) { //TODO: Czy potrzebne?
                     if (speed > w0) {
-                        if (rpm < w1Pl && rpm > w1Pg) {
-                            if (coolanttemp < w2P) {
-                                driveMark =+ (rpm / 100) * strtct; //kara x2
-                            } else {
-                                driveMark =-(rpm / 100) * strtcf; //kara
-                            }
+                        if (rpm > w1Pl && rpm < w1Pg) {
+                            driveMark -= 1 * strf; //nagroda
                         } else {
-                            driveMark =- 1 * strf; //nagroda
+                            if (coolanttemp < w2P) {
+                                driveMark += (rpm / 100) * strtct; //kara x2
+                            } else {
+                                driveMark += (rpm / 100) * strtcf; //kara
+                            }
                         }
                     } else {
                         if (rpm > w1L) {
                             if (coolanttemp < w2L) {
-                                driveMark =+ (rpm / 100) * sfrtct; //kara x2
+                                driveMark += (rpm / 100) * sfrtct; //kara x2
                             } else {
-                                driveMark =+ (rpm / 100) * sfrtcf; //kara
+                                driveMark += (rpm / 100) * sfrtcf; //kara
                             }
                         } else {
-                            driveMark =- 1 * sfrf; //nagroda
+                            driveMark -= 1 * sfrf; //nagroda
                         }
                     }
-
-//czesc 2
-
+                    //czesc 2
                     if (throttle > w3) {
-                        driveMark =+ throttle * tt; //kara
+                        driveMark += throttle * tt; //kara
                     } else {
-                        driveMark =- (100 - throttle) * tf; //nagroda
+                        driveMark -= (100 - throttle) * tf; //nagroda
                     }
 
                     if (gforce > w4) {
-                        driveMark =+ gforce * gt; //kara
+                        driveMark += gt * gforce; //kara
                     } else {
-                        driveMark =- gforce * gf; //nagroda
+                        driveMark -= gforce * gf; //nagroda
                     }
 
                     if (load > w5) {
-                        //kara //TODO: dodać ocenę obciążenia silnika
+                        driveMark += load * lt; //kara
                     } else {
-                        //nagroda
+                        driveMark -= load * lf;  //nagroda
+                    }
+
+                    if(throttle < 15 && rpm <1000 && load > 20){
+                        driveMark += 100; //dod. kara jazda na luzie
+                    }
+                    if(throttle <15 && load <20){
+                        driveMark -= 50; //dod. nagroda hamowanie silnikiem
                     }
 
 

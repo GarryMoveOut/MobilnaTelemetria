@@ -110,9 +110,9 @@ public class BluetoothFragmentv2 extends Fragment {
         tf = 1f;
         tt = 2f;
         gf = 2f;
-        gt = 1f;
-        lf = 0f; //TODO: dobrać współczynnik
-        lt = 0f;
+        gt = 5f;
+        lf = 1f; //TODO: dobrać współczynnik
+        lt = 1f;
 
         Log.d(TAG, "Wysłanie intencji do DriveAnalizerService");
         Intent intent = new Intent(getActivity(), DriveAnalizerService.class);
@@ -865,8 +865,8 @@ public class BluetoothFragmentv2 extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if(action.equals("pl.rychlinski.damian.mobilnatelemetria.driveanalizerservice.drivemark")){
-                float ocena = intent.getExtras().getFloat("MARK");
-                String sOcena = String.format("%.02f", ocena);
+                int ocena = intent.getExtras().getInt("MARK");
+                String sOcena = String.valueOf(ocena);
                 tvOcena.setText(sOcena);
             }
         }
