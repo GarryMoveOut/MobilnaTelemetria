@@ -627,7 +627,7 @@ public class BluetoothFragmentv2 extends Fragment {
 
         speedSet = new LineDataSet(null, "km/h");
         speedSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        speedSet.setColor(Color.DKGRAY);
+        speedSet.setColor(Color.CYAN);
         speedSet.setDrawCircles(false);
         speedSet.setLineWidth(2f);
         speedSet.setFillAlpha(65);
