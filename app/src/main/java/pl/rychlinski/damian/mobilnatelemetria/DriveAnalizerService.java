@@ -132,37 +132,37 @@ public class DriveAnalizerService extends Service implements SensorEventListener
             if(action.equals("pl.rychlinski.damian.mobilnatelemetria.pid.rpm")){
                 Log.d(TAG,"Received RPM");
                 rpm = intent.getExtras().getFloat("RPM");
-                if(rpm > 0f && rpm < 17000f) rpmChk = true;
+                if(rpm >= 0f && rpm <= 17000f) rpmChk = true;
             }
 
             if(action.equals("pl.rychlinski.damian.mobilnatelemetria.pid.load")){
                 Log.d(TAG,"Received Load");
                 load = intent.getExtras().getFloat("LOAD");
-                if(load > 0f && load < 100f) loadChk = true;
+                if(load >= 0f && load <= 100f) loadChk = true;
             }
 
             if(action.equals("pl.rychlinski.damian.mobilnatelemetria.pid.coolanttemp")){
                 Log.d(TAG,"Received Coolanttemp");
                 coolanttemp = intent.getExtras().getInt("COOLANTTEMP");
-                if(coolanttemp > -40 && coolanttemp < 215) coolantTempChk = true;
+                if(coolanttemp >= -40 && coolanttemp <= 215) coolantTempChk = true;
             }
 
             if(action.equals("pl.rychlinski.damian.mobilnatelemetria.pid.speed")){
                 Log.d(TAG,"Received Speed");
                 speed = intent.getExtras().getInt("SPEED");
-                if(speed > 0 && speed < 255) speedChk = true;
+                if(speed >= 0 && speed <= 255) speedChk = true;
             }
 
             if(action.equals("pl.rychlinski.damian.mobilnatelemetria.pid.airtemp")){
                 Log.d(TAG,"Received Airspeed");
                 airtemp = intent.getExtras().getInt("AIRTEMP");
-                if(airtemp > -40 && airtemp < 215) airtempChk = true;
+                if(airtemp >= -40 && airtemp <= 215) airtempChk = true;
             }
 
             if(action.equals("pl.rychlinski.damian.mobilnatelemetria.pid.throttle")){
                 Log.d(TAG,"Received throttle");
                 throttle = intent.getExtras().getFloat("THROTTLE");
-                if(throttle > 0f && throttle < 100f) throttleChk = true;
+                if(throttle >= 0f && throttle <= 100f) throttleChk = true;
             }
 
             if(rpmChk && loadChk && coolantTempChk && speedChk && airtempChk && throttleChk) {
