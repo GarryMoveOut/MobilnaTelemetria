@@ -815,6 +815,20 @@ public class BluetoothFragmentv2 extends Fragment {
                 alertDialog.show();
                 return true;
             }
+            case R.id.stopTel:{
+                getActivity().stopService(new Intent(getActivity(), DriveAnalizerService.class));
+                cRPM.clear();
+                cThrottle.clear();
+                cSpeed.clear();
+                cLoad.clear();
+
+                setupLineChartRpm();
+                setupLineChartSpeed();
+                setupLineChartLoad();
+                setupLineChartThrottle();
+
+                return true;
+            }
         }
         return false;
     }

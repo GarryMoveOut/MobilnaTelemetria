@@ -214,6 +214,9 @@ public class DriveAnalizerService extends Service implements SensorEventListener
                         driveMark -= 50; //dod. nagroda hamowanie silnikiem
                     }
 
+                    if(driveMark < 0){
+                        driveMark = 0;
+                    }
 
                     Intent driveMarkIntent = new Intent();
                     intent.setAction("pl.rychlinski.damian.mobilnatelemetria.driveanalizerservice.drivemark");
