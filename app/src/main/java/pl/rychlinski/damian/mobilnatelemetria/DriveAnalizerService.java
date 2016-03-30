@@ -61,11 +61,11 @@ public class DriveAnalizerService extends Service implements SensorEventListener
         w4 = 1f;
 
         sfrf = intent.getFloatExtra("sfrf", 10f);
-        sfrtcf = intent.getFloatExtra("sfrtcf",1);
-        sfrtct = intent.getFloatExtra("sfrtct",2f);
-        strf = intent.getFloatExtra("strf",20f);
-        strtcf = intent.getFloatExtra("strtcf", 1f);
-        strtct = intent.getFloatExtra("strtct",2f);
+        sfrtcf = intent.getFloatExtra("sfrtcf",10f);
+        sfrtct = intent.getFloatExtra("sfrtct",20f);
+        strf = intent.getFloatExtra("strf",5f);
+        strtcf = intent.getFloatExtra("strtcf", 10f);
+        strtct = intent.getFloatExtra("strtct",20f);
         tf = intent.getFloatExtra("tf",1f);
         tt = intent.getFloatExtra("tt",2f);
         gf = intent.getFloatExtra("gf",2f);
