@@ -102,11 +102,11 @@ public class BluetoothFragmentv2 extends Fragment {
         }
 
         sfrf = 10f;
-        sfrtcf = 1f;
-        sfrtct = 2f;
-        strf = 20f;
-        strtcf = 1f;
-        strtct = 2f;
+        sfrtcf = 10f;
+        sfrtct = 20f;
+        strf = 5f;
+        strtcf = 10f;
+        strtct = 20f;
         tf = 1f;
         tt = 2f;
         gf = 2f;
