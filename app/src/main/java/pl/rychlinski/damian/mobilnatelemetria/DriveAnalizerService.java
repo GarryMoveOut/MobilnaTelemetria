@@ -289,6 +289,9 @@ public class DriveAnalizerService extends Service implements SensorEventListener
             if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
                 Log.e("LOGGERTGREAD","Brak dostępu do karty");
             }else {
+                SimpleDateFormat sdf = new SimpleDateFormat("_ddMMyyyy_HHmmss");
+                String currentDateandTime = sdf.format(new Date());
+                filename = "driveLog"+currentDateandTime+".txt";
                 myExternalFile = new File(getExternalFilesDir(filepath), filename);
             }
         }
