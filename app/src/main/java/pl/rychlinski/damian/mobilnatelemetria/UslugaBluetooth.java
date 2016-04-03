@@ -294,6 +294,13 @@ public class UslugaBluetooth extends Service {
             preSetupON = true;
             addToQueue("atz; atl0; ate0; ath0; atat1; atstff; atsp0; atdp");
             fireCmd();
+
+            Log.i(TAG, "Pre config was send");
+            Message msg = mHandler.obtainMessage(Constants.MESSAGE_TOAST);
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.TOAST, "Przeprowadzono wstępne ustawienia");
+            msg.setData(bundle);
+            mHandler.sendMessage(msg);
         }
 
         /**
