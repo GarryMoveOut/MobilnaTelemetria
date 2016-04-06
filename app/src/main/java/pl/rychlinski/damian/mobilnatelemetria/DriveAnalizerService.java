@@ -37,7 +37,7 @@ public class DriveAnalizerService extends Service implements SensorEventListener
     private float w4;
 
     //kary
-    float sfrf, sfrtcf, sfrtct,
+    private float sfrf, sfrtcf, sfrtct,
             strf, strtcf, strtct,
             tf, tt,
             gf, gt,
