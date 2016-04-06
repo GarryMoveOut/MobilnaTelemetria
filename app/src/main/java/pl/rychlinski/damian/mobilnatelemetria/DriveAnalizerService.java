@@ -33,8 +33,8 @@ public class DriveAnalizerService extends Service implements SensorEventListener
     private int driveMark;
 
     //progi warunków
-    int w0, w1L, w1Pl, w1Pg, w2L, w2P, w3, w5;
-    float w4;
+    private int w0, w1L, w1Pl, w1Pg, w2L, w2P, w3, w5;
+    private float w4;
 
     //kary
     float sfrf, sfrtcf, sfrtct,
