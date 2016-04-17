@@ -12,7 +12,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ocena: "/>
+            android:text="Ocena: "
+            android:textSize="76dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -24,20 +25,24 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="24dp"
             android:text=" Temp. powietrza: "/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="24dp"
             android:id="@+id/tvAirTemp"
             android:text="0.0"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" Temp. płynu chłodniczego: "/>
+            android:textSize="24dp"
+            android:text=" Temp. płynu chłod.: "/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="24dp"
             android:id="@+id/tvCoolantTepm"
             android:text="0.0"/>
 
