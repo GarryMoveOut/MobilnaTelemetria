@@ -306,11 +306,11 @@ public class BluetoothFragment extends Fragment {
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
                 return true;
             }
-            case R.id.discoverable: {
+            /*case R.id.discoverable: {
                 // Ensure this device is discoverable by others
                 ensureDiscoverable();
                 return true;
-            }
+            }*/
         }
         return false;
     }

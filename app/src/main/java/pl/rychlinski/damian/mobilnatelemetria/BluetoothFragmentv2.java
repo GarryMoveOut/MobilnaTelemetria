@@ -4,6 +4,7 @@ package pl.rychlinski.damian.mobilnatelemetria;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -12,9 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -25,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,11 +34,9 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -723,11 +719,11 @@ public class BluetoothFragmentv2 extends Fragment {
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
                 return true;
             }
-            case R.id.discoverable: {
+            /*case R.id.discoverable: {
                 // Ensure this device is discoverable by others
                 ensureDiscoverable();
                 return true;
-            }
+            }*/
             case R.id.preSetup:{
                 View view = getView();
                 if (null != view) {
@@ -742,7 +738,7 @@ public class BluetoothFragmentv2 extends Fragment {
                 }
                 return true;
             }
-            case R.id.marksWeight:{
+            /*case R.id.marksWeight:{
                 LayoutInflater li = LayoutInflater.from(getActivity());
                 View promptsView = li.inflate(R.layout.marks_dialog, null);
 
@@ -814,7 +810,7 @@ public class BluetoothFragmentv2 extends Fragment {
                 // show it
                 alertDialog.show();
                 return true;
-            }
+            }*/
             case R.id.stopTel:{
                 getActivity().stopService(new Intent(getActivity(), DriveAnalizerService.class));
                 cRPM.clear();
